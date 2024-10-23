@@ -1,11 +1,11 @@
-from typing import Any, Optional, Callable
+from typing import Union, Optional, Callable
 
 from common.adapters.abstract_msg_client import AbstractMsgClient
 from kafka import KafkaProducer, KafkaConsumer
 
 
 class KafkaClient(AbstractMsgClient):
-    def __init__(self, bootstrap_servers: Any[int, list], topic: str):
+    def __init__(self, bootstrap_servers: Union[str, list], topic: str):
         self._bootstrap_servers = bootstrap_servers
         self._topic = topic
         self._producer = KafkaProducer(bootstrap_servers=bootstrap_servers)
