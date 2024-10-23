@@ -28,6 +28,15 @@ services:
     networks:
       - app-network
 
+  scheduling_extractor:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: scheduling_extractor
+    ports:
+      - "8000:8000"
+    command: sh -c "cd scheduling_extractor && gunicorn --bind 0.0.0.0:8000 scheduling_extractor.wsgi:application"
+
 
 networks:
   app-network:
