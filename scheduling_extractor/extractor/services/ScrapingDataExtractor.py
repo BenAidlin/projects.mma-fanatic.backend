@@ -36,4 +36,4 @@ class ScrapingDataExtractor(AbstractDataExtractor):
 
     @staticmethod
     def __scrape_event(event):
-        event_url = a
+        pass
