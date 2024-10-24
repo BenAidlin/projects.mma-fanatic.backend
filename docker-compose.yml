@@ -37,7 +37,7 @@ services:
       # override .env file
       - MONGO_HOST=scheduling_extractor_mongodb
       - MONGO_PORT=27017
-      - KAFKA_BOOTSTRAP_SERVERS=kafka:9092
+      - KAFKA_BOOTSTRAP_SERVERS=kafka:9093
 
   scheduling_extractor_mongodb:
     image: mongo:6
