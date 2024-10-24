@@ -3,12 +3,14 @@ from threading import Thread
 from django.apps import AppConfig
 
 from common.adapters.abstract_msg_client import AbstractMsgClient
+from .adapters.abstract_transformation_service import AbstractTransformationService
 from .dependency_injection_service import DIService
 
 
 class TransformerConfig(AppConfig):
     default_auto_field = 'django.db.models.BigAutoField'
     name = 'transformer'
+    _transformation_service: AbstractTransformationService = DIService.resolve('AbstractTransformationService')
 
     def ready(self):
         consumer: AbstractMsgClient = DIService.resolve('AbstractMsgClient')
@@ -18,5 +20,5 @@ class TransformerConfig(AppConfig):
 
     @staticmethod
     def _consumer_callback(message):
-        print(message)
+        TransformerConfig._transformation_service.transform_message(message=message)
 
