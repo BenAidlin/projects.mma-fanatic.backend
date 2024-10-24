@@ -18,7 +18,7 @@ COPY . .
 # Install Gunicorn
 RUN pip install gunicorn
 
-RUN export PYTHONPATH="${PYTHONPATH}:/app"
+ENV PYTHONPATH="${PYTHONPATH}:/app"
 # Expose the port the app runs on
 EXPOSE 8000
 
