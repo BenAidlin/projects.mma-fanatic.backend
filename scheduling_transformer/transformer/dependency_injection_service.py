@@ -1,4 +1,5 @@
 from common.implementations.dependency_injection_container import DIContainer
+from .services.transformation_service import TransformationService
 import threading
 
 class DIService(DIContainer):
@@ -14,6 +15,7 @@ class DIService(DIContainer):
                                  config('KAFKA_USER'),
                                  config('KAFKA_PASSWORD')))
 
+        DIService.register('AbstractTransformationService', TransformationService())
 
 lock = threading.Lock()
 with lock:
