@@ -6,11 +6,15 @@ import requests
 import jmespath
 
 from ..models.extraction_job_model import ExtractionJobModel
-
+from common.adapters.abstract_msg_client import AbstractMsgClient
+from common.implementations.kafka_client import KafkaClient
+from decouple import config
 
 class ScrapingDataExtractor(AbstractDataExtractor):
-    def __init__(self, **kwargs):
+    def __init__(self, abstract_msg_client: AbstractMsgClient):
         self.url = "https://site.web.api.espn.com/apis/personalized/v2/scoreboard/header?sport=mma&region=us&lang=en&configuration=SITE_DEFAULT&platform=web&buyWindow=1m&showAirings=buy%2Clive%2Creplay&showZipLookup=true&tz=America%2FNew_York&postalCode=38362%2044"
+        self.abstract_msg_client = abstract_msg_client if abstract_msg_client is not None else\
+            KafkaClient(config('KAFKA_BOOTSTRAP_SERVERS'), config('KAFKA_TOPIC'), config('KAFKA_USERNAME'), config('KAFKA_PASSWORD'))
 
 
     def extract_data(self):
