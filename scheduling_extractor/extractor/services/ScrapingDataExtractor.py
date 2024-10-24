@@ -17,6 +17,7 @@ class ScrapingDataExtractor(AbstractDataExtractor):
 
     def extract_data(self):
         leagues = self.__get_year_leagues()
+        self.abstract_msg_client.produce_message(str(leagues))
         extraction_job_model = ExtractionJobModel(time=datetime.now(), success=True, length=len(str(leagues)))
         extraction_job_model.save()
 

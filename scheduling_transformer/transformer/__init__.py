@@ -1,0 +1,1 @@
+default_app_config = 'transformer.apps.TransformerConfig'
