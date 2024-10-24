@@ -1,8 +1,12 @@
+from datetime import datetime
 from time import sleep
 
 from ..adapters.AbstractDataExtractor import AbstractDataExtractor
 import requests
 import jmespath
+
+from ..models.extraction_job_model import ExtractionJobModel
+
 
 class ScrapingDataExtractor(AbstractDataExtractor):
     def __init__(self, **kwargs):
@@ -13,8 +17,8 @@ class ScrapingDataExtractor(AbstractDataExtractor):
         leagues = self.__get_year_leagues()
         for league in leagues:
             events = ScrapingDataExtractor.__get_events(league)
-
-
+        extraction_job_model = ExtractionJobModel(time=datetime.now(), success=True, length=len(str(leagues)))
+        extraction_job_model.save()
 
     def __get_year_leagues(self):
         try:

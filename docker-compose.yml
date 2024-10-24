@@ -33,12 +33,15 @@ services:
     command: sh -c "cd scheduling_extractor && gunicorn --bind 0.0.0.0:8000 scheduling_extractor.wsgi:application"
     networks:
       - app-network
+    environment:
+      # override .env file
+      - MONGO_HOST='scheduling_extractor_mongodb'
 
   scheduling_extractor_mongodb:
     image: mongo:6
     container_name: scheduling_extractor_mongodb
     ports:
-      - "27017:27011"
+      - "27011:27017"
     networks:
       - app-network
 
