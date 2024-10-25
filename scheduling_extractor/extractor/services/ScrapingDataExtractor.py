@@ -1,4 +1,6 @@
 from datetime import datetime
+from typing import List
+
 from bs4 import BeautifulSoup
 import json
 import re
@@ -8,6 +10,7 @@ import jmespath
 
 from common.adapters.abstract_msg_client import AbstractMsgClient
 from ..dependency_injection_service import DIService
+from ..models.django_models.event_model import EventModel
 from ..models.django_models.extraction_job_model import ExtractionJobModel
 from ..models.ScrapingUrl import ScrapingUrl
 
@@ -18,13 +21,13 @@ class ScrapingDataExtractor(AbstractDataExtractor):
 
 
     def extract_data(self):
-        events = self.scrape_events()
+        events = self._scrape_events()
         self.abstract_msg_client.produce_message(str(events))
         extraction_job_model = ExtractionJobModel(time=datetime.now(), success=True, length=len(str(events)))
         extraction_job_model.save()
 
 
-    def scrape_events(self):
+    def _scrape_events(self) -> List[EventModel]:
         try:
             headers = {
                 'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/58.0.3029.110 Safari/537.3'
@@ -40,8 +43,15 @@ class ScrapingDataExtractor(AbstractDataExtractor):
             script_line = script_line.replace('window[\'__espnfitt__\']=', '')
             script_line = script_line[0:-1]
             json_data = json.loads(script_line)
-            jmespath_query = "page.content.events.values(@)[].{id: id, link: link, date: date, name: name, is_completed: completed}"
-            events = jmespath.search(jmespath_query, json_data)
+            jmespath_query = "page.content.events.values(@)[].{id: id, link: link, event_date: date, name: name, is_completed: completed}"
+            events_dictionaries = jmespath.search(jmespath_query, json_data)
+            events: List[EventModel] = [EventModel(**event) for event in events_dictionaries]
+            for event in events:
+                self._scrape_event(event)
             return events
         except Exception as e:
             return []
+
+    def _scrape_event(self, event: EventModel):
+        if not event.link:
+            return
