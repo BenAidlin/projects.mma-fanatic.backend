@@ -28,7 +28,7 @@ class ScrapingDataExtractor(AbstractDataExtractor):
 
     def extract_data(self):
         events = self._scrape_events()
-        self.abstract_msg_client.produce_message(str([event.to_mongo() for event in events]))
+        self.abstract_msg_client.produce_message(f"[{', '.join([event.to_json() for event in events])}]")
         extraction_job_model = ExtractionJobModel(time=datetime.now(), success=True, length=len(str(events)))
         extraction_job_model.save()
 
@@ -45,7 +45,7 @@ class ScrapingDataExtractor(AbstractDataExtractor):
                 events_dictionaries = jmespath.search(jmespath_query, json_data)
                 events.extend([ExtractedEventModel(**event) for event in events_dictionaries])
 
-            events = list(filter(lambda event: not event.is_completed, events))
+            events = list(filter(lambda event: not event.is_completed and event.link, events))
             futures = []
             with ThreadPoolExecutor() as executor:
                 for event in events:
