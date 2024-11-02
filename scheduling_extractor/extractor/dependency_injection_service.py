@@ -7,10 +7,8 @@ class DIService(DIContainer):
     def initialize(cls):
         from decouple import config
         from common.implementations.kafka_client import KafkaClient
-        from .models.ScrapingUrl import ScrapingUrl
         from .services.ScrapingDataExtractor import ScrapingDataExtractor
 
-        DIService.register('ScrapingUrl', ScrapingUrl(config('SCRAPING_URL')))
         DIService.register('AbstractMsgClient',
                              KafkaClient(
                                  config('KAFKA_BOOTSTRAP_SERVERS'),
