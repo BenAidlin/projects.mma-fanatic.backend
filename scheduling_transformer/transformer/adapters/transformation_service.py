@@ -1,5 +1,5 @@
 import json
-from ..adapters.abstract_transformation_service import AbstractTransformationService
+from ..services.abstract_transformation_service import AbstractTransformationService
 from ..models.mongo.event_model import EventModel
 
 class TransformationService(AbstractTransformationService):

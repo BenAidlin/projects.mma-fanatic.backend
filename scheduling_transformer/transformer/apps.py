@@ -3,7 +3,7 @@ from threading import Thread
 from django.apps import AppConfig
 
 from common.adapters.abstract_msg_client import AbstractMsgClient
-from .adapters.abstract_transformation_service import AbstractTransformationService
+from .services.abstract_transformation_service import AbstractTransformationService
 from .dependency_injection_service import DIService
 
 
