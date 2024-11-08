@@ -2,7 +2,7 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from rest_framework.request import Request
 
-from ..adapters.AbstractDataExtractor import AbstractDataExtractor
+from ..services.abstract_data_extractor import AbstractDataExtractor
 from ..dependency_injection_service import DIService
 
 class ExtractorView(APIView):

@@ -6,14 +6,14 @@ from typing import List
 from bs4 import BeautifulSoup
 import json
 import re
-from ..adapters.AbstractDataExtractor import AbstractDataExtractor
+from ..services.abstract_data_extractor import AbstractDataExtractor
 import requests
 import jmespath
 
 from common.adapters.abstract_msg_client import AbstractMsgClient
 from ..dependency_injection_service import DIService
-from ..models.django_models.event_model import ExtractedEventModel
-from ..models.django_models.extraction_job_model import ExtractionJobModel
+from ..models.mongo.event_model import ExtractedEventModel
+from ..models.mongo.extraction_job_model import ExtractionJobModel
 
 
 class ScrapingDataExtractor(AbstractDataExtractor):
