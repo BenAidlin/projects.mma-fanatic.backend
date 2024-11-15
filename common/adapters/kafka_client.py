@@ -1,6 +1,6 @@
 from typing import Union, Optional, Callable
 
-from common.adapters.abstract_msg_client import AbstractMsgClient
+from common.abstract.abstract_msg_client import AbstractMsgClient
 from kafka import KafkaProducer, KafkaConsumer
 
 

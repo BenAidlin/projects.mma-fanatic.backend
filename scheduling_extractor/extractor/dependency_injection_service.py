@@ -1,12 +1,12 @@
 
-from common.implementations.dependency_injection_container import DIContainer
+from common.dependency_injection_container import DIContainer
 import threading
 
 class DIService(DIContainer):
     @classmethod
     def initialize(cls):
         from decouple import config
-        from common.implementations.kafka_client import KafkaClient
+        from common.adapters.kafka_client import KafkaClient
         from .adapters.scraping_data_extractor import ScrapingDataExtractor
 
         DIService.register('AbstractMsgClient',

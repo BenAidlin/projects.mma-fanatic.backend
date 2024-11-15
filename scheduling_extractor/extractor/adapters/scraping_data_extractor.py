@@ -10,7 +10,7 @@ from ..services.abstract_data_extractor import AbstractDataExtractor
 import requests
 import jmespath
 
-from common.adapters.abstract_msg_client import AbstractMsgClient
+from common.abstract.abstract_msg_client import AbstractMsgClient
 from ..dependency_injection_service import DIService
 from ..models.mongo.event_model import ExtractedEventModel
 from ..models.mongo.extraction_job_model import ExtractionJobModel

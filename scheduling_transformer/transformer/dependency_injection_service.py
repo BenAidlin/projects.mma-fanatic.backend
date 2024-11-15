@@ -1,4 +1,4 @@
-from common.implementations.dependency_injection_container import DIContainer
+from common.dependency_injection_container import DIContainer
 from .adapters.scheduling_service import SchedulingService
 from .adapters.transformation_service import TransformationService
 import threading
@@ -7,7 +7,7 @@ class DIService(DIContainer):
     @classmethod
     def initialize(cls):
         from decouple import config
-        from common.implementations.kafka_client import KafkaClient
+        from common.adapters.kafka_client import KafkaClient
 
         DIService.register('AbstractMsgClient',
                              KafkaClient(
