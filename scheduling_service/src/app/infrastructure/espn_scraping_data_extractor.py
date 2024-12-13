@@ -24,7 +24,6 @@ class EspnScrapingDataExtractor(AbstractDataExtractor):
     def extract_data(self):
         return self._scrape_events()
 
-
     def _scrape_events(self) -> list[dict]:
         try:
             headers = self._get_headers_for_scraping()
@@ -33,7 +32,7 @@ class EspnScrapingDataExtractor(AbstractDataExtractor):
                 url = self._get_espn_base_url() + scraping_url
                 response = requests.get(url, headers=headers)
                 json_data = self._extract_espn_scraping_logic(response=response)
-                jmespath_query = "page.content.events.values(@)[].{id: espn_id, link: link, event_date: date, name: name, is_completed: completed}"
+                jmespath_query = "page.content.events.values(@)[].{original_id: id, link: link, event_date: date, name: name, is_completed: completed, postponed_or_canceled: isPostponedOrCanceled}"
                 events_dictionaries = jmespath.search(jmespath_query, json_data)
                 events.extend([event for event in events_dictionaries])
 
@@ -46,13 +45,11 @@ class EspnScrapingDataExtractor(AbstractDataExtractor):
         except Exception as e:
             return []
 
-
     def _scrape_event(self, event: dict):
         if not event['link']:
             event['cards'] = None
         else:
             event['cards'] = self._scrape_cards(event['link'])
-
 
     def _scrape_cards(self, link: str) -> dict:
         headers = self._get_headers_for_scraping()
@@ -61,7 +58,6 @@ class EspnScrapingDataExtractor(AbstractDataExtractor):
         jmespath_query = "page.content.gamepackage.cardSegs"
         cards = jmespath.search(jmespath_query, json_data)
         return cards
-
 
     @staticmethod
     def _get_headers_for_scraping() -> dict:

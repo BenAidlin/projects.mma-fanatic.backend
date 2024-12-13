@@ -2,6 +2,10 @@ import mongoengine as me
 
 class EventModel(me.DynamicDocument):
     id: me.StringField(required=False)
+    original_id: me.StringField(required=False)
+    is_completed: me.BooleanField(required=True)
+    postponed_or_canceled: me.BooleanField(required=True)
+    event_date: me.DateTimeField(required=True)
     name: me.StringField(required=True)
     cards: me.ListField(me.ReferenceField('CardModel'), required=True)
     meta = {
