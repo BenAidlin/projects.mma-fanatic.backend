@@ -1,4 +1,39 @@
 services:
+
+  scheduling_service:
+    build:
+      context: ./scheduling_service
+      dockerfile: Dockerfile
+    ports:
+      - "8001:8000"
+    volumes:
+      - .:/app
+    command: uvicorn scheduling_service.src.app.main:app --host 0.0.0.0 --port 8000 --reload
+    depends_on:
+      - kafka
+      - scheduling_service_mongodb
+    environment:
+      MONGO_HOST: "scheduling_service_mongodb"
+      MONGO_PORT: "27017"
+      MONGO_USER: ""
+      MONGO_PASSWORD: ""
+      MONGO_DB: "scheduling"
+      KAFKA_BOOTSTRAP_SERVERS: "kafka:9093"
+      KAFKA_TOPIC: "scheduling-events"
+      KAFKA_USER: ""
+      KAFKA_PASSWORD: ""
+    networks:
+      - app-network
+
+      
+  scheduling_service_mongodb:
+    image: mongo:6
+    container_name: scheduling_extractor_mongodb
+    ports:
+      - "27011:27017"
+    networks:
+      - app-network
+  
   zookeeper:
     image: wurstmeister/zookeeper:latest
     container_name: zookeeper
@@ -27,58 +62,6 @@ services:
       timeout: 10s
       retries: 5
 
-  # scheduling_extractor service with port mapping to end with 1 (8001, 27011) on host machine
-  scheduling_extractor:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: scheduling_extractor
-    ports:
-      - "8001:8000"
-    command: sh -c "cd scheduling_extractor && gunicorn --bind 0.0.0.0:8000 scheduling_extractor.wsgi:application"
-    networks:
-      - app-network
-    environment:
-      # override .env file
-      - MONGO_HOST=scheduling_extractor_mongodb
-      - MONGO_PORT=27017
-      - KAFKA_BOOTSTRAP_SERVERS=kafka:9093
-
-  scheduling_extractor_mongodb:
-    image: mongo:6
-    container_name: scheduling_extractor_mongodb
-    ports:
-      - "27011:27017"
-    networks:
-      - app-network
-
-  # scheduling_transformer service with port mapping to end with 2 (8002, 27012) on host machine
-  scheduling_transformer:
-    build:
-      context: .
-      dockerfile: Dockerfile
-    container_name: scheduling_transformer
-    ports:
-      - "8002:8000"
-    command: sh -c "cd scheduling_transformer && gunicorn --bind 0.0.0.0:8000 scheduling_transformer.wsgi:application"
-    networks:
-      - app-network
-    environment:
-      # override .env file
-      - MONGO_HOST=scheduling_transformer_mongodb
-      - MONGO_PORT=27017
-      - KAFKA_BOOTSTRAP_SERVERS=kafka:9093
-    depends_on:
-      kafka:
-        condition: service_healthy
-
-  scheduling_transformer_mongodb:
-    image: mongo:6
-    container_name: scheduling_transformer_mongodb
-    ports:
-      - "27012:27017"
-    networks:
-      - app-network
 
 networks:
   app-network:
