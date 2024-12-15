@@ -10,6 +10,13 @@ import requests
 import jmespath
 
 from scheduling_service.src.app.domains.schedule.adapters.abstract_data_extractor import AbstractDataExtractor
+from scheduling_service.src.app.domains.schedule.models.event_model import (
+    CardModel,
+    EventModel,
+    FightModel,
+    FighterStats,
+    FighterModel,
+)
 
 
 class EspnScrapingDataExtractor(AbstractDataExtractor):
@@ -21,10 +28,10 @@ class EspnScrapingDataExtractor(AbstractDataExtractor):
         self.scraping_urls: List[str] = [f'/mma/schedule/_/year/{datetime.now().year}', f'/mma/schedule/_/year/{datetime.now().year+1}']
         self.lock = threading.RLock()
 
-    def extract_data(self):
+    def extract_data(self) -> list[EventModel]:
         return self._scrape_events()
 
-    def _scrape_events(self) -> list[dict]:
+    def _scrape_events(self) -> list[EventModel]:
         try:
             headers = self._get_headers_for_scraping()
             events: list[dict] = []
@@ -41,7 +48,7 @@ class EspnScrapingDataExtractor(AbstractDataExtractor):
                 for event in events:
                     futures.append(executor.submit(self._scrape_event, event))
             for future in futures: future.result()
-            return events
+            return self._to_model(events)
         except Exception as e:
             return []
 
@@ -58,6 +65,188 @@ class EspnScrapingDataExtractor(AbstractDataExtractor):
         jmespath_query = "page.content.gamepackage.cardSegs"
         cards = jmespath.search(jmespath_query, json_data)
         return cards
+
+    def _to_model(self, events: list[dict]) -> list[EventModel]:
+        return [
+            EventModel(
+                id=None,
+                original_id=event.get("original_id"),
+                is_completed=event.get("is_completed"),
+                postponed_or_canceled=event.get("postponed_or_canceled"),
+                event_date=event.get("event_date"),
+                name=event.get("name"),
+                cards=(
+                    [
+                        CardModel(
+                            id=None,
+                            original_id=c.get("id"),
+                            hdr=c.get("hdr"),
+                            status=c.get("status"),
+                            mtchs=(
+                                [
+                                    FightModel(
+                                        id=None,
+                                        original_id=f.get("id"),
+                                        awy=(
+                                            FighterModel(
+                                                id=None,
+                                                original_id=(f["awy"].get("id")),
+                                                gender=(f["awy"].get("gndr")),
+                                                country=(f["awy"].get("country")),
+                                                first_name=(f["awy"].get("frstNm")),
+                                                last_name=(f["awy"].get("lstNm")),
+                                                display_name=(f["awy"].get("dspNm")),
+                                                rec=(f["awy"].get("rec")),
+                                                short_display_name=(
+                                                    f["awy"].get("shrtDspNm")
+                                                ),
+                                                stats=(
+                                                    FighterStats(
+                                                        age=f["awy"]["stats"].get(
+                                                            "age"
+                                                        ),
+                                                        ht=(
+                                                            f["awy"]["stats"].get("ht")
+                                                        ),
+                                                        wt=(
+                                                            f["awy"]["stats"].get("wt")
+                                                        ),
+                                                        rch=(
+                                                            f["awy"]["stats"].get("rch")
+                                                        ),
+                                                        sigstrkacc=(
+                                                            f["awy"]["stats"].get(
+                                                                "sigstrkacc"
+                                                            )
+                                                        ),
+                                                        sigstrklpm=(
+                                                            f["awy"]["stats"].get(
+                                                                "sigstrklpm"
+                                                            )
+                                                        ),
+                                                        stnce=(
+                                                            f["awy"]["stats"].get(
+                                                                "stnce"
+                                                            )
+                                                        ),
+                                                        subavg=(
+                                                            f["awy"]["stats"].get(
+                                                                "subavg"
+                                                            )
+                                                        ),
+                                                        tdacc=(
+                                                            f["awy"]["stats"].get(
+                                                                "tdacc"
+                                                            )
+                                                        ),
+                                                        tdavg=(
+                                                            f["awy"]["stats"].get(
+                                                                "tdavg"
+                                                            )
+                                                        ),
+                                                        odds=(
+                                                            f["awy"]["stats"].get(
+                                                                "odds"
+                                                            )
+                                                        ),
+                                                    )
+                                                    if f["awy"].get("stats")
+                                                    else None
+                                                ),
+                                            )
+                                            if f["awy"]
+                                            else None
+                                        ),
+                                        hme=(
+                                            FighterModel(
+                                                id=None,
+                                                original_id=(f["hme"].get("id")),
+                                                gender=(f["hme"].get("gndr")),
+                                                country=(f["hme"].get("country")),
+                                                first_name=(f["hme"].get("frstNm")),
+                                                last_name=(f["hme"].get("lstNm")),
+                                                display_name=(f["hme"].get("dspNm")),
+                                                rec=(f["hme"].get("rec")),
+                                                short_display_name=(
+                                                    f["hme"].get("shrtDspNm")
+                                                ),
+                                                stats=(
+                                                    FighterStats(
+                                                        age=f["hme"]["stats"].get(
+                                                            "age"
+                                                        ),
+                                                        ht=(
+                                                            f["hme"]["stats"].get("ht")
+                                                        ),
+                                                        wt=(
+                                                            f["hme"]["stats"].get("wt")
+                                                        ),
+                                                        rch=(
+                                                            f["hme"]["stats"].get("rch")
+                                                        ),
+                                                        sigstrkacc=(
+                                                            f["hme"]["stats"].get(
+                                                                "sigstrkacc"
+                                                            )
+                                                        ),
+                                                        sigstrklpm=(
+                                                            f["hme"]["stats"].get(
+                                                                "sigstrklpm"
+                                                            )
+                                                        ),
+                                                        stnce=(
+                                                            f["hme"]["stats"].get(
+                                                                "stnce"
+                                                            )
+                                                        ),
+                                                        subavg=(
+                                                            f["hme"]["stats"].get(
+                                                                "subavg"
+                                                            )
+                                                        ),
+                                                        tdacc=(
+                                                            f["hme"]["stats"].get(
+                                                                "tdacc"
+                                                            )
+                                                        ),
+                                                        tdavg=(
+                                                            f["hme"]["stats"].get(
+                                                                "tdavg"
+                                                            )
+                                                        ),
+                                                        odds=(
+                                                            f["hme"]["stats"].get(
+                                                                "odds"
+                                                            )
+                                                        ),
+                                                    )
+                                                    if f["hme"].get("stats")
+                                                    else None
+                                                ),
+                                            )
+                                            if f["hme"]
+                                            else None
+                                        ),
+                                        nte=f.get("nte"),
+                                        status=f.get("status", {"state": None}).get(
+                                            "state"
+                                        ),
+                                        dt=f.get("dt"),
+                                    )
+                                    for f in c["mtchs"]
+                                ]
+                                if c["mtchs"]
+                                else None
+                            ),
+                        )
+                        for c in event["cards"]
+                    ]
+                    if event["cards"]
+                    else None
+                ),
+            )
+            for event in events
+        ]
 
     @staticmethod
     def _get_headers_for_scraping() -> dict:

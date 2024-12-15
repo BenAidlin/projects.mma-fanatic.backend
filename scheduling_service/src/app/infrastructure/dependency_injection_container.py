@@ -1,6 +1,10 @@
 import threading
 from typing import Any
 
+from scheduling_service.src.app.infrastructure.schedule_repository import (
+    ScheduleRepository,
+)
+
 class DIContainer:
     _services = {}
     _lock = threading.Lock()  # Create a lock for thread safety
@@ -42,6 +46,8 @@ class DIContainer:
         from scheduling_service.src.app.domains.schedule.facades.schedule_facade import ScheduleFacade
 
         DIContainer.register('AbstractDataExtractor', EspnScrapingDataExtractor())
+
+        DIContainer.register("AbstractScheduleRepository", ScheduleRepository())
 
         DIContainer.register('AbstractSchedulingExtractionService', SchedulingExtractionService())
 

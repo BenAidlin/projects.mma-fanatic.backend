@@ -1,59 +1,54 @@
-import mongoengine as me
-
-class EventModel(me.DynamicDocument):
-    id: me.StringField(required=False)
-    original_id: me.StringField(required=False)
-    is_completed: me.BooleanField(required=True)
-    postponed_or_canceled: me.BooleanField(required=True)
-    event_date: me.DateTimeField(required=True)
-    name: me.StringField(required=True)
-    cards: me.ListField(me.ReferenceField('CardModel'), required=True)
-    meta = {
-        'collection': 'events',
-        'strict': False,
-    }
-    @classmethod
-    def get_data(cls):
-        return cls.objects(cards__exists=True, cards__0__exists=True)
+from pydantic import BaseModel
+import datetime as dt
 
 
-class CardModel(me.DynamicDocument):
-    id: me.StringField(required=False)
-    hdr: me.StringField(required=True)
-    status: me.StringField(required=True)
-    mtchs: me.ListField(me.ReferenceField('FightModel'), required=True)
+class FighterStats(BaseModel):
+    age: int | None | str
+    ht: str | None
+    rch: str | None
+    sigstrkacc: str | None
+    sigstrklpm: str | None
+    stnce: str | None
+    subavg: str | None
+    tdacc: str | None
+    tdavg: str | None
+    wt: str | None
+    odds: str | None
 
 
-class FightModel(me.DynamicDocument):
-    id: me.StringField(required=False)
-    awy: me.ReferenceField('FighterModel', required=True)
-    hme: me.ReferenceField('FighterModel', required=True)
-    nte: me.StringField(required=True)
-    status: me.ReferenceField('FightStatusModel', required=True)
-    dt: me.DateTimeField(required=True)
+class FighterModel(BaseModel):
+    original_id: str | None
+    gender: str
+    country: str | None
+    first_name: str | None
+    last_name: str | None
+    display_name: str | None
+    rec: str | None
+    short_display_name: str | None
+    stats: FighterStats | None
 
-class FightStatusModel(me.DynamicDocument):
-    id: me.StringField(required=False)
-    state: me.StringField(required=True)
 
-class FighterModel(me.DynamicDocument):
-    id: me.StringField(required=False)
-    gndr: me.StringField(required=True)
-    country: me.StringField(required=True)
-    firstNm: me.StringField(required=True)
-    lstNm: me.StringField(required=True)
-    dspNm: me.StringField(required=True)
-    rec: me.StringField(required=True)
-    shrtDspNm: me.StringField(required=True)
+class FightModel(BaseModel):
+    original_id: str | None
+    awy: FighterModel
+    hme: FighterModel
+    nte: str | None
+    status: str | None
+    dt: dt.datetime | None
 
-class FighterStats(me.DynamicDocument):
-    age: me.IntField(required=True)
-    ht: me.StringField(required=True)
-    rch: me.StringField(required=True)
-    sigstrkacc: me.StringField(required=True)
-    sigstrklpm: me.StringField(required=True)
-    stnce: me.StringField(required=True)
-    subavg: me.StringField(required=True)
-    tdacc: me.StringField(required=True)
-    tdavg: me.StringField(required=True)
-    wt: me.StringField(required=True)
+
+class CardModel(BaseModel):
+    original_id: str | None
+    hdr: str | None
+    status: str | None
+    mtchs: list[FightModel] | None
+
+
+class EventModel(BaseModel):
+    id: str | None
+    original_id: str
+    is_completed: bool
+    postponed_or_canceled: bool
+    event_date: dt.datetime
+    name: str
+    cards: list[CardModel] | None

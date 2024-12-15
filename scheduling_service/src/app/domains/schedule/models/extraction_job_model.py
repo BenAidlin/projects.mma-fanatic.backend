@@ -1,9 +1,8 @@
-import mongoengine as me
+from pydantic import BaseModel
+import datetime as dt
 
-class ExtractionJobModel(me.Document):
-    time = me.DateTimeField(required=True)
-    success = me.BooleanField(required=True)
-    length = me.IntField(required=True)
-    meta = {
-        'collection': 'extraction_jobs'
-    }
+
+class ExtractionJobModel(BaseModel):
+    time = dt.datetime
+    success = bool
+    length = int
