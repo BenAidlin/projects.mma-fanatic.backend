@@ -143,7 +143,6 @@ class FightModelDb(me.EmbeddedDocument):
 
 
 class CardModelDb(me.EmbeddedDocument):
-    original_id = me.StringField(required=False, null=True)
     hdr = me.StringField(required=False, null=True)
     status = me.StringField(required=False, null=True)
     mtchs = me.ListField(
@@ -152,7 +151,6 @@ class CardModelDb(me.EmbeddedDocument):
 
     def to_pydantic(self):
         return CardModel(
-            original_id=self.original_id,
             hdr=self.hdr,
             status=self.status,
             mtchs=[match.to_pydantic() for match in self.mtchs],
@@ -161,9 +159,6 @@ class CardModelDb(me.EmbeddedDocument):
     @classmethod
     def from_pydantic(cls, pydantic_model: CardModel):
         return CardModelDb(
-            original_id=(
-                str(pydantic_model.original_id) if pydantic_model.original_id else None
-            ),
             hdr=str(pydantic_model.hdr) if pydantic_model.hdr else None,
             status=str(pydantic_model.status) if pydantic_model.status else None,
             mtchs=[FightModelDb.from_pydantic(match) for match in pydantic_model.mtchs],

@@ -38,7 +38,6 @@ class FightModel(BaseModel):
 
 
 class CardModel(BaseModel):
-    original_id: str | None
     hdr: str | None
     status: str | None
     mtchs: list[FightModel] | None
