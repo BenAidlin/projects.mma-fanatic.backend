@@ -1,7 +1,6 @@
 from fastapi import APIRouter
 from fastapi_restful.cbv import cbv
 
-from scheduling_service.src.app.api.v1.schema.event_model import EventAPIModel
 from scheduling_service.src.app.domains.schedule.facades.schedule_facade import ScheduleFacade
 from scheduling_service.src.app.infrastructure.dependency_injection_container import DIContainer
 
