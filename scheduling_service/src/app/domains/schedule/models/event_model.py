@@ -1,4 +1,4 @@
-from pydantic import BaseModel
+from pydantic import BaseModel, Field
 import datetime as dt
 
 
@@ -29,7 +29,7 @@ class FighterModel(BaseModel):
 
 
 class FightModel(BaseModel):
-    original_id: str | None
+    original_id: str | None = Field(exclude=True)
     awy: FighterModel
     hme: FighterModel
     nte: str | None
@@ -45,7 +45,7 @@ class CardModel(BaseModel):
 
 class EventModel(BaseModel):
     id: str | None
-    original_id: str
+    original_id: str = Field(exclude=True)
     is_completed: bool
     postponed_or_canceled: bool
     event_date: dt.datetime

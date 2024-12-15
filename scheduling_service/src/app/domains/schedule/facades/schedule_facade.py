@@ -1,3 +1,4 @@
+from scheduling_service.src.app.domains.schedule.models.event_model import EventModel
 from scheduling_service.src.app.domains.schedule.services.scheduling_extraction_service import \
     AbstractSchedulingExtractionService
 from scheduling_service.src.app.infrastructure.dependency_injection_container import DIContainer
@@ -12,6 +13,6 @@ class ScheduleFacade:
     def generate_schedule(self):
         return self.schedule_service.extract_general_schedule()
 
-    def get_schedule(self):
+    def get_schedule(self) -> list[EventModel]:
         full_schedule = self.schedule_service.get_schedule()
         return full_schedule

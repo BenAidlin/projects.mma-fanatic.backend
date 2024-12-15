@@ -14,7 +14,7 @@ class ScheduleAPI:
 
     @router.get('/')
     def get_schedule(self):
-        return [EventAPIModel.from_schedule_model(e) for e in self.schedule_facade.get_schedule()]
+        return [e for e in self.schedule_facade.get_schedule()]
 
     @router.post('/')
     def create_schedule(self):
