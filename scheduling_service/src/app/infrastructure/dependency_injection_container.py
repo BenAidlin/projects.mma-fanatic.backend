@@ -45,6 +45,15 @@ class DIContainer:
             SchedulingExtractionService
         from scheduling_service.src.app.domains.schedule.facades.schedule_facade import ScheduleFacade
 
+        DIContainer.register(
+            "AbstractMsgClient",
+            KafkaClient(
+                config("KAFKA_BOOTSTRAP_SERVERS"),
+                config("KAFKA_TOPIC"),
+                config("KAFKA_USER"),
+                config("KAFKA_PASSWORD"),
+            ),
+        )
         DIContainer.register('AbstractDataExtractor', EspnScrapingDataExtractor())
 
         DIContainer.register("AbstractScheduleRepository", ScheduleRepository())
@@ -52,12 +61,5 @@ class DIContainer:
         DIContainer.register('AbstractSchedulingExtractionService', SchedulingExtractionService())
 
         DIContainer.register('ScheduleFacade', ScheduleFacade())
-
-        DIContainer.register('AbstractMsgClient',
-                           KafkaClient(
-                               config('KAFKA_BOOTSTRAP_SERVERS'),
-                               config('KAFKA_TOPIC'),
-                               config('KAFKA_USER'),
-                               config('KAFKA_PASSWORD')))
 
         DIContainer.set_initiated(True)

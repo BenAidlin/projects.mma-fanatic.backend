@@ -2,6 +2,7 @@
 ._venv
 venv
 venv_scheduling
+venv_general
 .idea
 __pycache__/
 *.py[cod]

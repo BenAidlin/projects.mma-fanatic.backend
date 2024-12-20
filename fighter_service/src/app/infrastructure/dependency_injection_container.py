@@ -1,6 +1,7 @@
 import threading
-from mimetypes import inited
 from typing import Any
+
+from fighter_service.src.app.infrastructure.kafka_client import KafkaClient
 
 
 class DIContainer:
@@ -25,12 +26,26 @@ class DIContainer:
 
     @classmethod
     def is_initiated(cls) -> bool:
-        return DIContainer._initiated
+        with cls._lock:
+            return DIContainer._initiated
 
     @classmethod
     def set_initiated(cls, initialized: bool) -> None:
-        DIContainer._initiated = initialized
+        with cls._lock:
+            DIContainer._initiated = initialized
 
     @classmethod
-    def initialize(cls) -> None:
-        raise NotImplementedError("Subclasses must implement the initialize method.")
+    def initialize(cls):
+        from decouple import config
+
+        DIContainer.register(
+            "AbstractMsgClient",
+            KafkaClient(
+                config("KAFKA_BOOTSTRAP_SERVERS"),
+                config("KAFKA_TOPIC"),
+                config("KAFKA_USER"),
+                config("KAFKA_PASSWORD"),
+            ),
+        )
+
+        DIContainer.set_initiated(True)

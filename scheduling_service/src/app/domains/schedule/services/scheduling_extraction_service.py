@@ -1,6 +1,9 @@
 import abc
 import datetime as dt
 from scheduling_service.src.app.domains.schedule.adapters.abstract_data_extractor import AbstractDataExtractor
+from scheduling_service.src.app.domains.schedule.adapters.abstract_msg_client import (
+    AbstractMsgClient,
+)
 from scheduling_service.src.app.domains.schedule.adapters.abstract_schedule_repository import (
     AbstractScheduleRepository,
 )
@@ -20,15 +23,18 @@ class SchedulingExtractionService(AbstractSchedulingExtractionService):
     DATETIME_FORMAT = "%Y-%m-%dT%H:%MZ"
     def __init__(
         self,
-        abstract_data_extractor: AbstractDataExtractor = None,
-        abstract_scheduling_repository: AbstractScheduleRepository = None,
+        data_extractor: AbstractDataExtractor = None,
+        repository: AbstractScheduleRepository = None,
+        msg_client: AbstractMsgClient = None,
     ):
         self.abstract_data_extractor: AbstractDataExtractor = (
-            abstract_data_extractor or DIContainer.resolve("AbstractDataExtractor")
+            data_extractor or DIContainer.resolve("AbstractDataExtractor")
         )
         self.abstract_schedule_repository: AbstractScheduleRepository = (
-            abstract_scheduling_repository
-            or DIContainer.resolve("AbstractScheduleRepository")
+            repository or DIContainer.resolve("AbstractScheduleRepository")
+        )
+        self.msg_client: AbstractMsgClient = msg_client or DIContainer.resolve(
+            "AbstractMsgClient"
         )
 
     def extract_general_schedule(self):
@@ -41,6 +47,12 @@ class SchedulingExtractionService(AbstractSchedulingExtractionService):
                 self.abstract_schedule_repository.delete_event(event_id=event.id)
         for event in new_events:
             self.abstract_schedule_repository.save_event(event)
+            for card in event.cards:
+                if card.mtchs:
+                    for fight in card.mtchs:
+                        if fight:
+                            self.msg_client.produce_message(str(fight.hme.model_dump()))
+                            self.msg_client.produce_message(str(fight.awy.model_dump()))
 
     def get_schedule(self) -> list[EventModel]:
         return self.abstract_schedule_repository.get_schedule()

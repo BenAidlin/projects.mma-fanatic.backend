@@ -1,0 +1,2 @@
+-r scheduling_service/requirements.txt
+-r fighter_service/requirements.txt
