@@ -5,12 +5,45 @@
     "version": "0.2.0",
     "configurations": [
         {
-            "name": "Scheduling Service",
+            "name": "bff service",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "bff_service.src.app.main:app",
+                "--reload"
+            ],
+            "jinja": true
+        },
+        {
+            "name": "fighter Service",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "fighter_service.src.app.main:app",
+                "--reload"
+            ],
+            "jinja": true
+        },
+        {
+            "name": "scheduling Service",
             "type": "debugpy",
             "request": "launch",
             "module": "uvicorn",
             "args": [
                 "scheduling_service.src.app.main:app",
+                "--reload"
+            ],
+            "jinja": true
+        },
+        {
+            "name": "user Service",
+            "type": "debugpy",
+            "request": "launch",
+            "module": "uvicorn",
+            "args": [
+                "user_service.src.app.main:app",
                 "--reload"
             ],
             "jinja": true

@@ -1,8 +1,9 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
-from scheduling_service.src.app.infrastructure.dependency_injection_container import DIContainer
-from scheduling_service.src.app.api.v1 import schedule_router
+from user_service.src.app.infrastructure.dependency_injection_container import (
+    DIContainer,
+)
 import mongoengine
 from decouple import config
 
@@ -21,8 +22,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
-app.include_router(schedule_router.router, prefix='/schedule')
+
 
 @app.get("/")
 def read_root():
-    return {"message": "Welcome to Scheduling service"}
+    return {"message": "Welcome to FastAPI"}

@@ -1,5 +1,8 @@
+import asyncio
+from contextlib import asynccontextmanager
+import threading
 from fastapi import FastAPI
-from mongoengine import connect
+import mongoengine
 from decouple import config
 
 from fighter_service.src.app.infrastructure.dependency_injection_container import (
@@ -7,21 +10,28 @@ from fighter_service.src.app.infrastructure.dependency_injection_container impor
 )
 from fighter_service.src.app.infrastructure.kafka_client import AbstractMsgClient
 
-connect(
-    db=config("MONGO_DB"),
-    host=f"mongodb://{config('MONGO_HOST')}:{config('MONGO_PORT')}/{config('MONGO_DB')}",
-    username=config("MONGO_USER"),
-    password=config("MONGO_PASSWORD"),
-)
 
-app = FastAPI()
-
-
-@app.on_event("startup")
-def startup_event():
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    mongoengine.connect(
+        db=config("MONGO_DB"),
+        host=f"mongodb://{config('MONGO_HOST')}:{config('MONGO_PORT')}/{config('MONGO_DB')}",
+        username=config("MONGO_USER"),
+        password=config("MONGO_PASSWORD"),
+    )
     DIContainer.initialize()
     msg_client: AbstractMsgClient = DIContainer.resolve("AbstractMsgClient")
-    msg_client.consume_messages(lambda message: print(f"Received message: {message}"))
+    thread = threading.Thread(
+        target=msg_client.consume_messages,
+        args=(lambda message: print(f"Received message: {message}"),),
+        daemon=True,
+    )
+    thread.start()
+    yield
+    mongoengine.disconnect()
+
+
+app = FastAPI(lifespan=lifespan)
 
 
 @app.get("/")

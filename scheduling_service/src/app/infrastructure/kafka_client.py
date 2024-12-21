@@ -4,19 +4,28 @@ from scheduling_service.src.app.domains.schedule.adapters.abstract_msg_client im
 
 
 class KafkaClient(AbstractMsgClient):
-    def __init__(self, bootstrap_servers: Union[str, list], topic: str, username: Optional[str] = None, password: Optional[str] = None):
-        try:
-            self._bootstrap_servers = bootstrap_servers
-            self._topic = topic
-            self.username = username
-            self.password = password
-            if self.username and self.password:
-                self._producer = KafkaProducer(bootstrap_servers=bootstrap_servers, security_protocol='SASL_PLAINTEXT',
-                                               sasl_mechanism='PLAIN', sasl_plain_username=username, sasl_plain_password=password)
-            else: # no authentication
-                self._producer = KafkaProducer(bootstrap_servers=bootstrap_servers)
-        except Exception as e:
-            pass
+
+    def __init__(
+        self,
+        bootstrap_servers: Union[str, list],
+        topic: str,
+        username: Optional[str] = None,
+        password: Optional[str] = None,
+    ):
+        self._bootstrap_servers = bootstrap_servers
+        self._topic = topic
+        self.username = username
+        self.password = password
+        if self.username and self.password:
+            self._producer = KafkaProducer(
+                bootstrap_servers=bootstrap_servers,
+                security_protocol="SASL_PLAINTEXT",
+                sasl_mechanism="PLAIN",
+                sasl_plain_username=username,
+                sasl_plain_password=password,
+            )
+        else:  # no authentication
+            self._producer = KafkaProducer(bootstrap_servers=bootstrap_servers)
 
     def produce_message(self, message: str) -> None:
         self._producer.send(self._topic, message.encode('utf-8'))
