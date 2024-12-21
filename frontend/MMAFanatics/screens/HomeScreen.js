@@ -1,30 +1,146 @@
-import React from 'react';
-import { View, Text, TouchableOpacity, FlatList, StyleSheet, Image } from 'react-native';
+import React, { useState } from 'react';
+import { View, Text, TouchableOpacity, FlatList, StyleSheet, Image, Dimensions, Platform, ScrollView } from 'react-native';
 
-// Sample data for the fights with additional details (you can replace this with actual data)
-const fights = [
+// Sample data for events and their respective fights
+const events = [
   {
     id: '1',
-    fighter1: 'Fighter A',
-    fighter2: 'Fighter B',
-    fighter1Details: { weight: '75 kg', height: '6\'2"', reach: '74"', record: '20-5-0' },
-    fighter2Details: { weight: '80 kg', height: '6\'0"', reach: '76"', record: '15-3-2' },
-    fighter1Image: 'https://via.placeholder.com/100?text=Fighter+A',
-    fighter2Image: 'https://via.placeholder.com/100?text=Fighter+B',
+    name: 'UFC 300',
+    date: '2024-12-25',
+    fights: [
+      {
+        id: '1',
+        fighter1: 'Fighter A',
+        fighter2: 'Fighter B',
+        fighter1Details: {
+          weight: '75 kg',
+          height: '6\'2"',
+          reach: '74"',
+          record: '20-5-0',
+          odds: '-155',
+        },
+        fighter2Details: {
+          weight: '80 kg',
+          height: '6\'0"',
+          reach: '76"',
+          record: '15-3-2',
+          odds: '+500',
+        },
+        fighter1Image: 'https://via.placeholder.com/100?text=Fighter+A',
+        fighter2Image: 'https://via.placeholder.com/100?text=Fighter+B',
+      },
+      {
+        id: '2',
+        fighter1: 'Fighter C',
+        fighter2: 'Fighter D',
+        fighter1Details: {
+          weight: '70 kg',
+          height: '5\'10"',
+          reach: '72"',
+          record: '18-6-0',
+          odds: '-200',
+        },
+        fighter2Details: {
+          weight: '85 kg',
+          height: '6\'1"',
+          reach: '78"',
+          record: '22-4-1',
+          odds: '+300',
+        },
+        fighter1Image: 'https://via.placeholder.com/100?text=Fighter+C',
+        fighter2Image: 'https://via.placeholder.com/100?text=Fighter+D',
+      },
+    ],
   },
   {
     id: '2',
-    fighter1: 'Fighter C',
-    fighter2: 'Fighter D',
-    fighter1Details: { weight: '70 kg', height: '5\'10"', reach: '72"', record: '18-6-0' },
-    fighter2Details: { weight: '85 kg', height: '6\'1"', reach: '78"', record: '22-4-1' },
-    fighter1Image: 'https://via.placeholder.com/100?text=Fighter+C',
-    fighter2Image: 'https://via.placeholder.com/100?text=Fighter+D',
+    name: 'UFC Fight Night',
+    date: '2025-01-15',
+    fights: [
+      {
+        id: '3',
+        fighter1: 'Fighter E',
+        fighter2: 'Fighter F',
+        fighter1Details: {
+          weight: '78 kg',
+          height: '6\'1"',
+          reach: '75"',
+          record: '15-2-0',
+          odds: '-120',
+        },
+        fighter2Details: {
+          weight: '82 kg',
+          height: '6\'0"',
+          reach: '77"',
+          record: '10-5-1',
+          odds: '+250',
+        },
+        fighter1Image: 'https://via.placeholder.com/100?text=Fighter+E',
+        fighter2Image: 'https://via.placeholder.com/100?text=Fighter+F',
+      },
+    ],
   },
-  // Add more fight data as needed
+  {
+    id: '3',
+    name: 'Bellator 350',
+    date: '2025-02-05',
+    fights: [
+      {
+        id: '4',
+        fighter1: 'Fighter G',
+        fighter2: 'Fighter H',
+        fighter1Details: {
+          weight: '77 kg',
+          height: '6\'0"',
+          reach: '73"',
+          record: '19-3-1',
+          odds: '-150',
+        },
+        fighter2Details: {
+          weight: '85 kg',
+          height: '6\'3"',
+          reach: '80"',
+          record: '20-2-0',
+          odds: '+400',
+        },
+        fighter1Image: 'https://via.placeholder.com/100?text=Fighter+G',
+        fighter2Image: 'https://via.placeholder.com/100?text=Fighter+H',
+      },
+      {
+        id: '5',
+        fighter1: 'Fighter I',
+        fighter2: 'Fighter J',
+        fighter1Details: {
+          weight: '80 kg',
+          height: '6\'1"',
+          reach: '75"',
+          record: '23-6-0',
+          odds: '-190',
+        },
+        fighter2Details: {
+          weight: '78 kg',
+          height: '5\'11"',
+          reach: '72"',
+          record: '17-4-0',
+          odds: '+350',
+        },
+        fighter1Image: 'https://via.placeholder.com/100?text=Fighter+I',
+        fighter2Image: 'https://via.placeholder.com/100?text=Fighter+J',
+      },
+    ],
+  },
+  // Add more events as needed
 ];
+const { width } = Dimensions.get('window'); // Get the screen width
 
 export default function HomeScreen({ navigation }) {
+  const [expandedEvent, setExpandedEvent] = useState(null);
+
+  // Toggle the visibility of the fights for a given event
+  const toggleEvent = (eventId) => {
+    setExpandedEvent((prevEvent) => (prevEvent === eventId ? null : eventId));
+  };
+
   // Render item for each fight
   const renderFightItem = ({ item }) => (
     <TouchableOpacity
@@ -44,6 +160,7 @@ export default function HomeScreen({ navigation }) {
           <Text style={styles.fighterDetail}>Height: {item.fighter1Details.height}</Text>
           <Text style={styles.fighterDetail}>Reach: {item.fighter1Details.reach}</Text>
           <Text style={styles.fighterDetail}>Record: {item.fighter1Details.record}</Text>
+          <Text style={styles.fighterDetail}>Odds: {item.fighter1Details.odds}</Text> {/* Added odds */}
         </View>
 
         {/* Fighter 2 details */}
@@ -54,30 +171,55 @@ export default function HomeScreen({ navigation }) {
           <Text style={styles.fighterDetail}>Height: {item.fighter2Details.height}</Text>
           <Text style={styles.fighterDetail}>Reach: {item.fighter2Details.reach}</Text>
           <Text style={styles.fighterDetail}>Record: {item.fighter2Details.record}</Text>
+          <Text style={styles.fighterDetail}>Odds: {item.fighter2Details.odds}</Text> {/* Added odds */}
         </View>
       </View>
     </TouchableOpacity>
   );
 
-  return (
-    <View style={styles.container}>
-      <Text style={styles.title}>Upcoming Fights</Text>
+  // Render item for each event
+  const renderEventItem = ({ item }) => (
+    <View style={styles.eventCard}>
+      <Text style={styles.eventTitle}>{item.name}</Text>
+      <Text style={styles.eventDate}>{item.date}</Text>
 
-      {/* List of fights */}
-      <FlatList
-        data={fights}
-        renderItem={renderFightItem}
-        keyExtractor={(item) => item.id}
-        contentContainerStyle={styles.fightList}
-      />
+      {/* Toggle button for event */}
+      <TouchableOpacity onPress={() => toggleEvent(item.id)} style={styles.toggleButton}>
+        <Text style={styles.toggleButtonText}>
+          {expandedEvent === item.id ? 'Collapse Fights' : 'Expand Fights'}
+        </Text>
+      </TouchableOpacity>
+
+      {/* List of fights within the event */}
+      {expandedEvent === item.id && (
+        <FlatList
+          data={item.fights}
+          renderItem={renderFightItem}
+          keyExtractor={(fight) => fight.id}
+        />
+      )}
     </View>
+  );
+
+  return (
+    <ScrollView contentContainerStyle={styles.container}>
+      <Text style={styles.title}>Upcoming Events</Text>
+
+      {/* List of events */}
+      <FlatList
+        data={events}
+        renderItem={renderEventItem}
+        keyExtractor={(item) => item.id}
+        contentContainerStyle={styles.eventList}
+      />
+    </ScrollView>
   );
 }
 
 const styles = StyleSheet.create({
   container: {
-    flex: 1,
-    justifyContent: 'center',
+    flexGrow: 1,
+    justifyContent: 'flex-start',
     alignItems: 'center',
     backgroundColor: '#F8F8F8',
     padding: 20,
@@ -88,10 +230,10 @@ const styles = StyleSheet.create({
     color: '#333',
     marginBottom: 20,
   },
-  fightList: {
+  eventList: {
     width: '100%',
   },
-  fightCard: {
+  eventCard: {
     backgroundColor: '#FFF',
     marginBottom: 20,
     padding: 15,
@@ -101,8 +243,42 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 4 },
     shadowRadius: 6,
     elevation: 5,
-    width: '100%', // Make the card take up the full width of the screen
-    marginHorizontal: 10, // Add horizontal margin to keep spacing from the sides
+    width: Platform.OS === 'web' ? width * 0.95 : '100%',
+    marginHorizontal: Platform.OS === 'web' ? 15 : 10,
+  },
+  eventTitle: {
+    fontSize: 24,
+    fontWeight: 'bold',
+    color: '#333',
+  },
+  eventDate: {
+    fontSize: 16,
+    color: '#777',
+    marginBottom: 10,
+  },
+  toggleButton: {
+    marginVertical: 10,
+    padding: 10,
+    backgroundColor: '#007BFF',
+    borderRadius: 5,
+    alignItems: 'center',
+  },
+  toggleButtonText: {
+    color: '#FFF',
+    fontSize: 16,
+  },
+  fightCard: {
+    backgroundColor: '#FFF',
+    marginBottom: 15,
+    padding: 15,
+    borderRadius: 10,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 4 },
+    shadowRadius: 6,
+    elevation: 5,
+    width: Platform.OS === 'web' ? width * 0.95 : '100%',
+    marginHorizontal: Platform.OS === 'web' ? 15 : 10,
   },
   fightHeader: {
     marginBottom: 10,
@@ -118,17 +294,21 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
   },
   fighterDetails: {
-    width: '45%', // Each fighter section takes up 45% of the card width
+    width: '45%',
     alignItems: 'center',
-    backgroundColor: '#F9F9F9',
+    backgroundColor: '#f0f0f0',
     padding: 10,
-    borderRadius: 10,
-    marginTop: 10,
+    borderRadius: 8,
+    shadowColor: '#000',
+    shadowOpacity: 0.1,
+    shadowOffset: { width: 0, height: 2 },
+    shadowRadius: 4,
+    elevation: 3,
   },
   fighterImage: {
-    width: 100,
-    height: 100,
-    borderRadius: 50,
+    width: 80,
+    height: 80,
+    borderRadius: 40,
     marginBottom: 10,
   },
   fighterName: {
@@ -140,6 +320,6 @@ const styles = StyleSheet.create({
   fighterDetail: {
     fontSize: 14,
     color: '#555',
-    marginBottom: 5,
+    marginBottom: 3,
   },
 });
