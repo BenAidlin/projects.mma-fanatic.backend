@@ -8,25 +8,27 @@ interface MatchCardProps {
 }
 
 const MatchCard: React.FC<MatchCardProps> = ({ fightId, match }) => {
+  const renderFighterDetails = (fighter: 'awy' | 'hme') => (
+    <div className="fighter-details">
+      <h5>{match[fighter].display_name}</h5>
+      <p>Record: {match[fighter].rec}</p>
+      <p>From: {match[fighter].country}</p>
+      <p>Age: {match[fighter].stats.age}</p>
+      <p>Height: {match[fighter].stats.ht}</p>
+      <p>Weight: {match[fighter].stats.wt}</p>
+      <PredictionButton fightId={fightId} match={match} fighter={fighter} />
+    </div>
+  );
+
   return (
     <div className="match-card">
-      <h4>{match.nte}</h4>
+      <h4 className="match-title">{match.nte}</h4>
       <div className="fighters">
-        <div className="fighter">
-          <h5>{match.awy.display_name}</h5>
-          <p>Record: {match.awy.rec}</p>
-          <p>From: {match.awy.country}</p>
-          <PredictionButton fightId={fightId} match={match} fighter="awy" />
-        </div>
+        {renderFighterDetails('awy')}
         <div className="vs">VS</div>
-        <div className="fighter">
-          <h5>{match.hme.display_name}</h5>
-          <p>Record: {match.hme.rec}</p>
-          <p>From: {match.hme.country}</p>
-          <PredictionButton fightId={fightId} match={match} fighter="hme" />
-        </div>
+        {renderFighterDetails('hme')}
       </div>
-      <p>Date: {new Date(match.dt).toLocaleString()}</p>
+      <p className="match-date">Date: {new Date(match.dt).toLocaleString()}</p>
     </div>
   );
 };

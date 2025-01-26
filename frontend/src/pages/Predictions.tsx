@@ -23,6 +23,15 @@ const Predictions: React.FC = () => {
     return { fight: undefined, matchup: 'Unknown matchup' };
   };
 
+  if (userPredictions.length === 0) {
+    return (
+      <div className="predictions">
+        <h2>My Predictions</h2>
+        <p>You haven't made any predictions yet. Visit the Fight Schedule to make predictions!</p>
+      </div>
+    );
+  }
+
   return (
     <div className="predictions">
       <h2>My Predictions</h2>
@@ -33,7 +42,7 @@ const Predictions: React.FC = () => {
             <li key={`${prediction.fightId}-${prediction.matchId}`}>
               {fight ? (
                 <>
-                  {fight.name}: {matchup} - Predicted {prediction.predictedWinner}
+                  <strong>{fight.name}:</strong> {matchup} - Predicted winner: {prediction.predictedWinner}
                 </>
               ) : (
                 <span>Prediction for unknown fight</span>

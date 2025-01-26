@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import Home from './pages/Home';
 import Schedule from './pages/Schedule';
 import Predictions from './pages/Predictions';
@@ -10,12 +10,27 @@ const App: React.FC = () => {
   return (
     <Router>
       <div className="App">
-        <UserScore />
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/schedule" element={<Schedule />} />
-          <Route path="/predictions" element={<Predictions />} />
-        </Routes>
+        <header>
+          <h1>UFC Fight Predictor</h1>
+          <nav>
+            <ul>
+              <li><Link to="/">Home</Link></li>
+              <li><Link to="/schedule">Schedule</Link></li>
+              <li><Link to="/predictions">Predictions</Link></li>
+            </ul>
+          </nav>
+          <UserScore />
+        </header>
+        <main>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/schedule" element={<Schedule />} />
+            <Route path="/predictions" element={<Predictions />} />
+          </Routes>
+        </main>
+        <footer>
+          <p>&copy; 2025 UFC Fight Predictor. All rights reserved.</p>
+        </footer>
       </div>
     </Router>
   );
