@@ -11,7 +11,7 @@ const fightSlice = createSlice({
   initialState: [] as Fight[],
   reducers: {},
   extraReducers: (builder) => {
-    builder.addCase(getFights.fulfilled, (state, action) => {
+    builder.addCase(getFights.fulfilled, (_, action) => {
       return action.payload;
     });
   },

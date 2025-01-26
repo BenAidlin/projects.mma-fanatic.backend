@@ -7,7 +7,8 @@ COPY package*.json ./
 RUN npm install
 
 COPY . .
-RUN npm run build
+# Run build with more verbose output and display the error log content
+RUN npm run build --verbose || (cat npm-debug.log || true && exit 1)
 
 # Production stage
 FROM nginx:alpine

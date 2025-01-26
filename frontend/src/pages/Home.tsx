@@ -5,7 +5,7 @@ import UserScore from '../components/UserScore';
 const Home: React.FC = () => {
   return (
     <div className="home">
-      <h1>UFC Fight Predictor</h1>
+      <h1>UFC Fight Predictor!</h1>
       <UserScore />
       <nav>
         <ul>

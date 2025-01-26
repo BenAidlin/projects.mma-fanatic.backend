@@ -1,23 +1,18 @@
 import React from 'react';
-import { Fight } from '../types';
+import { Match } from '../types';
+import MatchCard from './MatchCard';
 
 interface FightCardProps {
-  fight: Fight;
-  onPredict: (fightId: string, winner: string) => void;
+  card: Card;
 }
 
-const FightCard: React.FC<FightCardProps> = ({ fight, onPredict }) => {
+const FightCard: React.FC<FightCardProps> = ({ card }) => {
   return (
     <div className="fight-card">
-      <h3>{fight.weight_class}</h3>
-      <p>{fight.fighter1} vs {fight.fighter2}</p>
-      <p>Date: {fight.date}</p>
-      <button onClick={() => onPredict(fight.id, fight.fighter1)}>
-        Predict {fight.fighter1}
-      </button>
-      <button onClick={() => onPredict(fight.id, fight.fighter2)}>
-        Predict {fight.fighter2}
-      </button>
+      <h3>{card.hdr}</h3>
+      {card.mtchs.map((match, index) => (
+        <MatchCard key={index} match={match} />
+      ))}
     </div>
   );
 };

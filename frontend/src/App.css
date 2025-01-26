@@ -40,3 +40,32 @@
 .read-the-docs {
   color: #888;
 }
+.fight-event {
+  margin-bottom: 2rem;
+  border: 1px solid #ccc;
+  padding: 1rem;
+}
+
+.fight-card {
+  margin-bottom: 1rem;
+}
+
+.match-card {
+  border: 1px solid #eee;
+  padding: 1rem;
+  margin-bottom: 1rem;
+}
+
+.fighters {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.fighter {
+  flex: 1;
+}
+
+.vs {
+  padding: 0 1rem;
+}

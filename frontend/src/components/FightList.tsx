@@ -4,16 +4,21 @@ import FightCard from './FightCard';
 
 interface FightListProps {
   fights: Fight[];
-  onPredict: (fightId: string, winner: string) => void;
 }
 
-const FightList: React.FC<FightListProps> = ({ fights, onPredict }) => {
+const FightList: React.FC<FightListProps> = ({ fights }) => {
   return (
     <div className="fight-list">
       {fights.map((fight) => (
-        <FightCard key={fight.id} fight={fight} onPredict={onPredict} />
+        <div key={fight.id} className="fight-event">
+          <h2>{fight.name}</h2>
+          <p>Date: {new Date(fight.event_date).toLocaleString()}</p>
+          {fight.cards.map((card, index) => (
+            <FightCard key={index} card={card} />
+          ))}
+        </div>
       ))}
-    </div>
+        </div>
   );
 };
 

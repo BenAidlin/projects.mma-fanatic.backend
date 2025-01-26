@@ -1,5 +1,5 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
-import { User, Prediction } from '../types';
+import { User } from '../types';
 
 const initialState: User = {
   id: '',
@@ -12,7 +12,7 @@ const userSlice = createSlice({
   name: 'user',
   initialState,
   reducers: {
-    setUser: (state, action: PayloadAction<User>) => {
+    setUser: (_, action: PayloadAction<User>) => {
       return action.payload;
     },
     updateScore: (state, action: PayloadAction<number>) => {

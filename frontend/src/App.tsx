@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Home from './pages/Home';
 import Schedule from './pages/Schedule';
 import Predictions from './pages/Predictions';
+import './App.css';
 
 const App: React.FC = () => {
   return (
