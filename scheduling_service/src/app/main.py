@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from scheduling_service.src.app.infrastructure.dependency_injection_container import DIContainer
 from scheduling_service.src.app.api.v1 import schedule_router
@@ -21,6 +22,14 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # Allows all origins
+    allow_credentials=True,
+    allow_methods=["*"],  # Allows all methods
+    allow_headers=["*"],  # Allows all headers
+)
+
 app.include_router(schedule_router.router, prefix='/schedule')
 
 @app.get("/")

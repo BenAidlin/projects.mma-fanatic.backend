@@ -14,11 +14,11 @@ const FightList: React.FC<FightListProps> = ({ fights }) => {
           <h2>{fight.name}</h2>
           <p>Date: {new Date(fight.event_date).toLocaleString()}</p>
           {fight.cards.map((card, index) => (
-            <FightCard key={index} card={card} />
+            <FightCard key={index} fightId={fight.id} card={card} />
           ))}
         </div>
       ))}
-        </div>
+    </div>
   );
 };
 

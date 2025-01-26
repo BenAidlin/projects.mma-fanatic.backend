@@ -45,10 +45,12 @@ export interface Fight {
   cards: Card[];
 }
 
-  export interface Prediction {
-    fightId: string;
-    predictedWinner: string;
-  }
+export interface Prediction {
+  fightId: string;
+  matchId: string;
+  predictedWinner: string;
+}
+
   
   export interface User {
     id: string;
