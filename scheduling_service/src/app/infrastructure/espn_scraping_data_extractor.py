@@ -36,13 +36,16 @@ class EspnScrapingDataExtractor(AbstractDataExtractor):
             headers = self._get_headers_for_scraping()
             events: list[dict] = []
             for scraping_url in self.scraping_urls:
-                url = self._get_espn_base_url() + scraping_url
-                response = requests.get(url, headers=headers)
-                json_data = self._extract_espn_scraping_logic(response=response)
-                jmespath_query = "page.content.events.values(@)[].{original_id: id, link: link, event_date: date, name: name, is_completed: completed, postponed_or_canceled: isPostponedOrCanceled}"
-                events_dictionaries = jmespath.search(jmespath_query, json_data)
-                events.extend([event for event in events_dictionaries])
+                try:
+                    url = self._get_espn_base_url() + scraping_url
+                    response = requests.get(url, headers=headers, verify=False)
 
+                    json_data = self._extract_espn_scraping_logic(response=response)
+                    jmespath_query = "page.content.events.values(@)[].{original_id: id, link: link, event_date: date, name: name, is_completed: completed, postponed_or_canceled: isPostponedOrCanceled}"
+                    events_dictionaries = jmespath.search(jmespath_query, json_data)
+                    events.extend([event for event in events_dictionaries])
+                except:
+                    continue
             futures = []
             with ThreadPoolExecutor() as executor:
                 for event in events:
@@ -60,7 +63,9 @@ class EspnScrapingDataExtractor(AbstractDataExtractor):
 
     def _scrape_cards(self, link: str) -> dict:
         headers = self._get_headers_for_scraping()
-        response = requests.get(self._get_espn_base_url() + link, headers=headers)
+        response = requests.get(
+            self._get_espn_base_url() + link, headers=headers, verify=False
+        )
         json_data = self._extract_espn_scraping_logic(response=response)
         jmespath_query = "page.content.gamepackage.cardSegs"
         cards = jmespath.search(jmespath_query, json_data)
