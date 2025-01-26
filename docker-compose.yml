@@ -1,5 +1,16 @@
 services:
 
+  frontend:
+    build:
+      context: ./frontend  # Adjust this path to where your React app is located
+      dockerfile: Dockerfile
+    ports:
+      - "3000:80"  # Map port 80 in the container to 3000 on the host
+    networks:
+      - app-network
+    depends_on:
+      - bff_service  # Assuming the frontend depends on the BFF service
+
   scheduling_service:
     build:
       context: ./scheduling_service
