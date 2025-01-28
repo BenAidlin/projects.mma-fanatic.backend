@@ -16,7 +16,7 @@ const MatchCard: React.FC<MatchCardProps> = ({ fightId, match }) => {
       <p>Age: {match[fighter].stats.age}</p>
       <p>Height: {match[fighter].stats.ht}</p>
       <p>Weight: {match[fighter].stats.wt}</p>
-      <PredictionButton fightId={fightId} match={match} fighter={fighter} />
+      
     </div>
   );
 
@@ -29,6 +29,9 @@ const MatchCard: React.FC<MatchCardProps> = ({ fightId, match }) => {
         {renderFighterDetails('hme')}
       </div>
       <p className="match-date">Date: {new Date(match.dt).toLocaleString()}</p>
+      <div>
+        {match.hme.rec ? <PredictionButton fightId={fightId} match={match} /> : null}
+      </div>
     </div>
   );
 };

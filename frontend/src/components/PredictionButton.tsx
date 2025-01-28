@@ -1,30 +1,35 @@
-import React from 'react';
-import { useDispatch } from 'react-redux';
-import { AppDispatch } from '../store';
-import { addPredictionAsync } from '../store/userSlice';
+import React, {useState} from 'react';
+// import { useDispatch } from 'react-redux';
+// import { AppDispatch } from '../store';
+// import { addPredictionAsync } from '../store/userSlice';
 import { Match } from '../types';
+import Modal from './Modal';
 
 interface PredictionButtonProps {
   fightId: string;
   match: Match;
-  fighter: 'awy' | 'hme';
 }
 
-const PredictionButton: React.FC<PredictionButtonProps> = ({ fightId, match, fighter }) => {
-  const dispatch = useDispatch<AppDispatch>();
+const PredictionButton: React.FC<PredictionButtonProps> = ({fightId, match}) => {
+  // const dispatch = useDispatch<AppDispatch>();
+  const [isModalOpen, setIsModalOpen] = useState(false);
+
 
   const handlePredict = () => {
-    dispatch(addPredictionAsync({
-      fightId,
-      matchId: match[fighter].original_id,
-      predictedWinner: match[fighter].display_name,
-    }));
+    setIsModalOpen(true);
+  };
+  const closeModal = () => {
+    setIsModalOpen(false);
   };
 
   return (
-    <button onClick={handlePredict}>
-      Predict {match[fighter].display_name}
-    </button>
+    <div>
+      <button className='predict-button'  onClick={handlePredict}>
+        Predict Fight!
+      </button>
+      <Modal fightId={fightId} match={match} isOpen={isModalOpen} onClose={closeModal}>
+      </Modal>
+    </div>
   );
 };
 
