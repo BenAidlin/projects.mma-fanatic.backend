@@ -147,6 +147,7 @@ services:
       KAFKA_TOPIC_USERS: "user-events"
       KAFKA_USER: ""
       KAFKA_PASSWORD: ""
+      SERVICE_URL_SCHEDULING: 'http://scheduling_service:8000'
     networks:
       - app-network
 

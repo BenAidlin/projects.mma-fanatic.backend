@@ -1,5 +1,6 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
+from fastapi.responses import RedirectResponse
 
 from bff_service.src.app.infrastructure.dependency_injection_container import (
     DIContainer,
@@ -29,3 +30,9 @@ app = FastAPI(lifespan=lifespan)
 @app.get("/")
 def read_root():
     return {"message": "Welcome to BFF service"}
+
+
+@app.get("/schedule")
+def get_schedule():
+    schedule_service_url = config("SERVICE_URL_SCHEDULING")
+    return RedirectResponse(url=f"{schedule_service_url}/schedule")
