@@ -11,15 +11,19 @@ const App: React.FC = () => {
     <Router>
       <div className="App">
         <header>
-          <h1>UFC Fight Predictor</h1>
-          <nav>
-            <ul>
-              <li><Link to="/">Home</Link></li>
-              <li><Link to="/schedule">Schedule</Link></li>
-              <li><Link to="/predictions">Predictions</Link></li>
-            </ul>
-          </nav>
-          <UserScore />
+          <div className='header-content'>
+            <h1>UFC Fight Predictor</h1>
+            <nav>
+              <ul>
+                <li><Link to="/">Home</Link></li>
+                <li><Link to="/schedule">Schedule</Link></li>
+                <li><Link to="/predictions">Predictions</Link></li>
+              </ul>
+            </nav>
+            <div className='user-info'>
+              <UserScore />
+            </div>
+          </div>
         </header>
         <main>
           <Routes>
