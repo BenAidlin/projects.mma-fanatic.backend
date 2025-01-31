@@ -25,6 +25,8 @@ class PredictionRepository(AbstractPredictionRepository):
         prediction_model = PredictionModelDb.objects(
             id=prediction.prediction_id
         ).first()
+        if not prediction_model:
+            return
         prediction_model.user_id = prediction.user_id
         prediction_model.winner = prediction.winner
         prediction_model.method = prediction.method.name
@@ -33,4 +35,6 @@ class PredictionRepository(AbstractPredictionRepository):
         prediction_model.save()
 
     def remove_prediction(self, prediction_id: str) -> None:
-        PredictionModelDb.objects(id=prediction_id).first().delete()
+        prediction_model = PredictionModelDb.objects(id=prediction_id).first()
+        if prediction_model:
+            prediction_model.delete()

@@ -148,6 +148,7 @@ services:
       KAFKA_USER: ""
       KAFKA_PASSWORD: ""
       SERVICE_URL_SCHEDULING: 'http://scheduling_service:8001'
+      SERVICE_URL_PREDICTIONS: 'http://prediction_service:8003'
     networks:
       - app-network
 

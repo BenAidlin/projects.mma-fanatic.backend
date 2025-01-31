@@ -3,12 +3,12 @@ from fastapi import FastAPI
 from fastapi.responses import RedirectResponse
 from fastapi.middleware.cors import CORSMiddleware
 
+from bff_service.src.app.api import predictions_router, schedule_router
 from bff_service.src.app.infrastructure.dependency_injection_container import (
     DIContainer,
 )
 import mongoengine
 from decouple import config
-import requests
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
@@ -26,6 +26,9 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+app.include_router(predictions_router.router, prefix="/predictions")
+app.include_router(schedule_router.router, prefix="/schedule")
+
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],  # Allows all origins
@@ -37,11 +40,3 @@ app.add_middleware(
 @app.get("/")
 def read_root():
     return {"message": "Welcome to BFF service"}
-
-
-@app.get("/schedule")
-def get_schedule():
-    schedule_service_url = config("SERVICE_URL_SCHEDULING")
-    # authentication stuff
-    # TODO: use service layer , infrastructure, routers
-    return requests.get(f"{schedule_service_url}/schedule", verify=False).json()
