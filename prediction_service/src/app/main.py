@@ -1,7 +1,8 @@
 from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
-from user_service.src.app.infrastructure.dependency_injection_container import (
+from prediction_service.src.app.api import predictions_router
+from prediction_service.src.app.infrastructure.dependency_injection_container import (
     DIContainer,
 )
 import mongoengine
@@ -22,6 +23,8 @@ async def lifespan(app: FastAPI):
 
 
 app = FastAPI(lifespan=lifespan)
+
+app.include_router(predictions_router.router, prefix="/predictions")
 
 
 @app.get("/")

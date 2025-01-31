@@ -34,5 +34,17 @@ class DIContainer:
 
     @classmethod
     def initialize(cls):
-        # initialize di container
+        from prediction_service.src.app.infrastructure.repositories.prediction_repository import (
+            PredictionRepository,
+        )
+        from prediction_service.src.app.domains.prediction_domain.service.prediction_service import (
+            PredictionService,
+        )
+        from prediction_service.src.app.domains.prediction_domain.facade.prediction_facade import (
+            PredictionFacade,
+        )
+
+        DIContainer.register("AbstractPredictionRepository", PredictionRepository())
+        DIContainer.register("PredictionService", PredictionService())
+        DIContainer.register("PredictionFacade", PredictionFacade())
         DIContainer.set_initiated(True)

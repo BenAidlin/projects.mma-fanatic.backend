@@ -38,12 +38,12 @@
             "jinja": true
         },
         {
-            "name": "user Service",
+            "name": "prediction Service",
             "type": "debugpy",
             "request": "launch",
             "module": "uvicorn",
             "args": [
-                "user_service.src.app.main:app",
+                "prediction_service.src.app.main:app",
                 "--reload"
             ],
             "jinja": true
