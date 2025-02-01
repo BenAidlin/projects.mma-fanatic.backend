@@ -21,7 +21,7 @@
             "request": "launch",
             "module": "uvicorn",
             "args": [
-                "fighter_service.src.app.main:app",
+                "fight_service.src.app.main:app",
                 "--reload"
             ],
             "jinja": true

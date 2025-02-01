@@ -1,7 +1,7 @@
 import threading
 from typing import Any
 
-from fighter_service.src.app.infrastructure.kafka_client import KafkaClient
+from fight_service.src.app.infrastructure.kafka_client import KafkaClient
 
 
 class DIContainer:

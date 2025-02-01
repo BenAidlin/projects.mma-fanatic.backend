@@ -246,7 +246,11 @@ class EspnScrapingDataExtractor(AbstractDataExtractor):
                                         ),
                                         nte=f.get("nte"),
                                         status=f.get("status", {"state": None}).get(
-                                            "state"
+                                            "state", ""
+                                        )
+                                        + "---"
+                                        + f.get("status", {"state": None}).get(
+                                            "det", ""
                                         ),
                                         dt=f.get("dt"),
                                     )

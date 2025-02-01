@@ -5,10 +5,10 @@ from fastapi import FastAPI
 import mongoengine
 from decouple import config
 
-from fighter_service.src.app.infrastructure.dependency_injection_container import (
+from fight_service.src.app.infrastructure.dependency_injection_container import (
     DIContainer,
 )
-from fighter_service.src.app.infrastructure.kafka_client import AbstractMsgClient
+from fight_service.src.app.infrastructure.kafka_client import AbstractMsgClient
 
 
 @asynccontextmanager
