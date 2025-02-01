@@ -16,5 +16,5 @@ class ScheduleAPI:
         return [e for e in self.schedule_facade.get_schedule()]
 
     @router.post('/')
-    def create_schedule(self):
-        self.schedule_facade.generate_schedule()
+    def create_schedule(self, years: list[int] = None):
+        self.schedule_facade.generate_schedule(years=years)

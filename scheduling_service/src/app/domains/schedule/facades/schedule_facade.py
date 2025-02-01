@@ -10,8 +10,8 @@ class ScheduleFacade:
         if not self.schedule_service:
             self.schedule_service: AbstractSchedulingExtractionService = DIContainer.resolve('AbstractSchedulingExtractionService')
 
-    def generate_schedule(self):
-        return self.schedule_service.extract_general_schedule()
+    def generate_schedule(self, years: list[int] = None):
+        return self.schedule_service.extract_general_schedule(years=years)
 
     def get_schedule(self) -> list[EventModel]:
         full_schedule = self.schedule_service.get_schedule()

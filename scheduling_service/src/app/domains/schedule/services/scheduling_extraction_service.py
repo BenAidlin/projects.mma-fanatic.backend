@@ -12,7 +12,7 @@ from scheduling_service.src.app.domains.schedule.models.event_model import Event
 
 class AbstractSchedulingExtractionService:
     @abc.abstractmethod
-    def extract_general_schedule(self):
+    def extract_general_schedule(self, years: list[int] = None):
         pass
 
     @abc.abstractmethod
@@ -37,8 +37,8 @@ class SchedulingExtractionService(AbstractSchedulingExtractionService):
             "AbstractMsgClient"
         )
 
-    def extract_general_schedule(self):
-        new_events = self.abstract_data_extractor.extract_data()
+    def extract_general_schedule(self, years: list[int] = None):
+        new_events = self.abstract_data_extractor.extract_data(years)
         # keep only relevant events
         new_events = [event for event in new_events if event.cards and event.event_date]
         current_schedule = self.get_schedule()

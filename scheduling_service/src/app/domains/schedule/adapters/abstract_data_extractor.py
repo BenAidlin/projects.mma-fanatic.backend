@@ -5,5 +5,5 @@ from scheduling_service.src.app.domains.schedule.models.event_model import Event
 
 class AbstractDataExtractor(abc.ABC):
     @abc.abstractmethod
-    def extract_data(self) -> list[EventModel]:
+    def extract_data(self, years: list[int] = None) -> list[EventModel]:
         pass
