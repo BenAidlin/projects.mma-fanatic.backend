@@ -149,7 +149,7 @@ services:
       KAFKA_PASSWORD: ""
       SERVICE_URL_SCHEDULING: 'http://scheduling_service:8000'
       SERVICE_URL_PREDICTIONS: 'http://prediction_service:8000'
-      GOOGLE_REDIRECT_URI: "http://bff_service:8000/auth/google/callback"
+      GOOGLE_REDIRECT_URI: "http://localhost:8004/auth/google/callback"
     networks:
       - app-network
 
