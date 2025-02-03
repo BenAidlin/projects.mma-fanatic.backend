@@ -1,5 +1,6 @@
 import axios from 'axios';
 import Cookies from 'js-cookie';
+import { User } from '../types';
 
 const API_URL = 'http://localhost:8004';
 
@@ -13,7 +14,7 @@ export const handleAuthCallback = async (token: string) => {
   window.location.href = '/';
 };
 
-export const getCurrentUser = async () => {
+export const getCurrentUser = async (): Promise<User | null> => {
   const token = Cookies.get('auth_token');
   if (!token) return null;
 

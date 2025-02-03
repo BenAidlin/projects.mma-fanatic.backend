@@ -16,6 +16,7 @@ from bff_service.src.app.api import predictions_router, schedule_router
 from bff_service.src.app.infrastructure.dependency_injection_container import (
     DIContainer,
 )
+from bff_service.src.app.models.user import User
 
 
 @asynccontextmanager
@@ -114,7 +115,7 @@ async def google_auth_callback(code: str):
         user_info = user_info_response.json()
 
     # Create a JWT token
-    access_token = create_access_token(data={"sub": user_info["email"]})
+    access_token = create_access_token(data=user_info)
 
     # Redirect to frontend with the token
     frontend_url = config("REACT_APP")  # Update this to your React app's URL
@@ -133,14 +134,14 @@ def create_access_token(data: dict):
 async def get_user(token: str = Depends(oauth2_scheme)):
     try:
         payload = jwt.decode(token, SECRET_KEY, algorithms=[ALGORITHM])
-        email = payload.get("sub")
-        if email is None:
+        user = User.from_dict(payload)
+        if user is None or user.email is None:
             raise HTTPException(
                 status_code=401, detail="Invalid authentication credentials"
             )
         # Here you would typically query your database to get the user details
         # For this example, we'll just return the email
-        return {"email": email}
+        return user
     except jwt.PyJWTError:
         raise HTTPException(
             status_code=401, detail="Invalid authentication credentials"

@@ -3,17 +3,13 @@ import { User, Prediction } from '../types';
 import { submitPrediction } from '../services/api';
 
 interface UserState {
-  id: string;
-  username: string;
-  score: number;
-  predictions: Prediction[];
+  data: User | null;
+  isLoggedIn: boolean;
 }
 
 const initialState: UserState = {
-  id: '',
-  username: '',
-  score: 0,
-  predictions: [],
+  data: null,
+  isLoggedIn: false,
 };
 
 export const addPredictionAsync = createAsyncThunk(
@@ -36,22 +32,30 @@ const userSlice = createSlice({
   initialState,
   reducers: {
     setUser: (state, action: PayloadAction<User>) => {
-      return { ...state, ...action.payload };
+      state.data = action.payload;
+      state.isLoggedIn = true;
     },
     updateScore: (state, action: PayloadAction<number>) => {
-      state.score += action.payload;
+      if (state.data) {
+        state.data.score += action.payload;
+      }
+    },
+    clearUser: (state) => {
+      state.data = null;
+      state.isLoggedIn = false;
     },
   },
   extraReducers: (builder) => {
     builder.addCase(addPredictionAsync.fulfilled, (state, action) => {
-      state.predictions.push(action.payload);
+      if (state.data) {
+        state.data.predictions.push(action.payload);
+      }
     });
     builder.addCase(addPredictionAsync.rejected, (_, action) => {
       console.error('Failed to add prediction:', action.payload);
-      // You could also update the state here to show an error message to the user
     });
   },
 });
 
-export const { setUser, updateScore } = userSlice.actions;
+export const { setUser, updateScore, clearUser } = userSlice.actions;
 export default userSlice.reducer;

@@ -53,8 +53,12 @@ export interface Prediction {
 
   
   export interface User {
-    id: string;
-    username: string;
+    id: string | null;
+    email: string | null;
+    name: string | null;
+    given_name: string | null;
+    family_name: string | null;
+    picture: string | null;
     score: number;
     predictions: Prediction[];
   }

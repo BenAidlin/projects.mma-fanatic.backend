@@ -7,17 +7,28 @@ import UserScore from './components/UserScore';
 import Login from './components/Login';
 import { getCurrentUser, handleAuthCallback, logout } from './services/auth';
 import './App.css';
+import { useDispatch, useSelector } from 'react-redux';
+import { RootState } from './store';
+import { clearUser, setUser } from './store/userSlice';
 
 const App: React.FC = () => {
-  const [user, setUser] = useState<any>(null);
+  const dispatch = useDispatch();
+  const user = useSelector((state: RootState) => state.user.data);
 
   useEffect(() => {
     const fetchUser = async () => {
       const userData = await getCurrentUser();
-      setUser(userData);
+      if (userData) {
+        dispatch(setUser(userData));
+      }
     };
     fetchUser();
-  }, []);
+  }, [dispatch]);
+
+  const handleLogout = () => {
+    logout();
+    dispatch(clearUser());
+  };
 
   return (
     <Router>
@@ -31,7 +42,7 @@ const App: React.FC = () => {
                 <li><Link to="/schedule">Schedule</Link></li>
                 <li><Link to="/predictions">Predictions</Link></li>
                 {user ? (
-                  <li><button onClick={logout}>Logout</button></li>
+                  <li><button onClick={handleLogout}>Logout</button></li>
                 ) : (
                   <li><Link to="/login">Login</Link></li>
                 )}
@@ -40,7 +51,7 @@ const App: React.FC = () => {
             <div className='user-info'>
               {user ? (
                 <>
-                  <span>Welcome, {user.email}</span>
+                  <span>Welcome, {user.given_name}</span>
                   <UserScore />
                 </>
               ) : (
