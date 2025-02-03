@@ -6,7 +6,7 @@ import { Fight, Prediction, Card, Match } from '../types';
 
 const Predictions: React.FC = () => {
   const fightState = useSelector((state: RootState) => state.fights);
-  const userPredictions = useSelector((state: RootState) => state.user.predictions);
+  const userPredictions = useSelector((state: RootState) => state.user?.data?.predictions);
 
   const findFightAndMatch = (prediction: Prediction): { fight: Fight | undefined, matchup: string } => {
     const fight = fightState.fights.find((f: Fight) => f.id === prediction.fightId);
@@ -24,7 +24,7 @@ const Predictions: React.FC = () => {
     return { fight: undefined, matchup: 'Unknown matchup' };
   };
 
-  if (userPredictions.length === 0) {
+  if (userPredictions?.length === 0) {
     return (
       <div className="predictions">
         <h2>My Predictions</h2>
@@ -37,7 +37,7 @@ const Predictions: React.FC = () => {
     <div className="predictions">
       <h2>My Predictions</h2>
       <ul>
-        {userPredictions.map((prediction: Prediction) => {
+        {userPredictions?.map((prediction: Prediction) => {
           const { fight, matchup } = findFightAndMatch(prediction);
           return (
             <li key={`${prediction.fightId}-${prediction.matchId}`}>

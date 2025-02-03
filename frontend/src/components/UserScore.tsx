@@ -7,8 +7,8 @@ const UserScore: React.FC = () => {
 
   return (
     <div className="user-score">
-      <h2>Welcome, {user.username}</h2>
-      <p>Your score: {user.score}</p>
+      <h2>Welcome, {user?.data?.given_name}</h2>
+      <p>Your score: {user?.data?.score}</p>
     </div>
   );
 };
