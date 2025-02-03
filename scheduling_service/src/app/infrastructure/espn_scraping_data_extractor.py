@@ -245,6 +245,7 @@ class EspnScrapingDataExtractor(AbstractDataExtractor):
                                             else None
                                         ),
                                         nte=f.get("nte"),
+                                        # status starting with in + ... R3
                                         status=f.get("status", {"state": None}).get(
                                             "state", ""
                                         )
