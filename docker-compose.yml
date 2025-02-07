@@ -168,8 +168,8 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: INSIDE  # Set the inter-broker listener name
     healthcheck:
       test: [ "CMD", "sh", "-c", "nc -z kafka 9092" ]
-      interval: 30s
-      timeout: 10s
+      interval: 5s
+      timeout: 5s
       retries: 5
 
 
