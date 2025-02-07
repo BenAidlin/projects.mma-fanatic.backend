@@ -10,7 +10,7 @@ from scheduling_service.src.app.infrastructure.dependency_injection_container im
     DIContainer,
 )
 
-if __name__ == "main":
+if __name__ == "__main__":
     DIContainer.initialize()
     mongoengine.connect(
         db=config("MONGO_DB"),
