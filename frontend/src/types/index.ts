@@ -52,7 +52,6 @@ export interface Prediction {
   method: Method;
   round: number | null;
   potential_gain: number | null;
-  card_id: string;
   hme_id: string;
   awy_id: string;
 }

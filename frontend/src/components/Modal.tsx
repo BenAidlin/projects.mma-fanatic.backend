@@ -5,12 +5,11 @@ import { getPredictions, createPrediction, updatePrediction, deletePredictions }
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  fightId: string;
   match: Match;
   userId: string;
 }
 
-const Modal: React.FC<ModalProps> = ({ isOpen, onClose, fightId, match, userId }) => {
+const Modal: React.FC<ModalProps> = ({ isOpen, onClose, match, userId }) => {
   const [prediction, setPrediction] = useState<Prediction | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
@@ -37,7 +36,6 @@ const Modal: React.FC<ModalProps> = ({ isOpen, onClose, fightId, match, userId }
           method: Method.NOT_PICKED,
           round: null,
           potential_gain: null,
-          card_id: fightId,
           hme_id: match.hme.original_id,
           awy_id: match.awy.original_id,
         });

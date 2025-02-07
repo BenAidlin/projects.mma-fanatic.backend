@@ -12,7 +12,6 @@ class PredictionModelDb(me.Document):
     method = me.StringField(required=False, null=True)
     round = me.IntField(required=False, null=True)
     potential_gain = me.IntField(required=False, null=True)
-    card_id = me.StringField(required=True, null=False)
     hme_id = me.StringField(required=True, null=False)
     awy_id = me.StringField(required=True, null=False)
     meta = {
@@ -32,7 +31,6 @@ class PredictionModelDb(me.Document):
             method=Method(self.method),
             round=self.round,
             potential_gain=self.potential_gain,
-            card_id=self.card_id,
             hme_id=self.hme_id,
             awy_id=self.awy_id,
         )
@@ -45,7 +43,6 @@ class PredictionModelDb(me.Document):
             method=pydantic_model.method.name,
             round=pydantic_model.round,
             potential_gain=pydantic_model.potential_gain,
-            card_id=pydantic_model.card_id,
             hme_id=pydantic_model.hme_id,
             awy_id=pydantic_model.awy_id,
         )
