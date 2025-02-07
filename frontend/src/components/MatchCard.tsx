@@ -3,11 +3,10 @@ import { Match } from '../types';
 import PredictionButton from './PredictionButton';
 
 interface MatchCardProps {
-  fightId: string;
   match: Match;
 }
 
-const MatchCard: React.FC<MatchCardProps> = ({ fightId, match }) => {
+const MatchCard: React.FC<MatchCardProps> = ({ match }) => {
   const renderFighterDetails = (fighter: 'awy' | 'hme') => (
     <div className="fighter-details">
       <h5>{match[fighter].display_name}</h5>
@@ -30,7 +29,7 @@ const MatchCard: React.FC<MatchCardProps> = ({ fightId, match }) => {
       </div>
       <p className="match-date">Date: {new Date(match.dt).toLocaleString()}</p>
       <div>
-        {match.hme.rec ? <PredictionButton fightId={fightId} match={match} /> : null}
+        {match.hme.rec ? <PredictionButton match={match} /> : null}
       </div>
     </div>
   );

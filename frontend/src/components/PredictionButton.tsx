@@ -5,11 +5,10 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 
 interface PredictionButtonProps {
-  fightId: string;
   match: Match;
 }
 
-const PredictionButton: React.FC<PredictionButtonProps> = ({fightId, match}) => {
+const PredictionButton: React.FC<PredictionButtonProps> = ({match}) => {
   // const dispatch = useDispatch<AppDispatch>();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const user = useSelector((state: RootState) => state.user.data);

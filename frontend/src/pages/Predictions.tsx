@@ -62,18 +62,19 @@ const Predictions: React.FC = () => {
     setModalMatch(match)
   }
 
-  const handleDelete = (predictions: Prediction[]) => {
-    deletePredictions(predictions);
-    handlePredictionsUpdated();
+  const handleDelete = async (predictions: Prediction[]) => {
+    await deletePredictions(predictions);
+    await handlePredictionsUpdated();
   }
 
-  const handleModalClose= () => {
+  const handleModalClose = async () => {
     setModalMatch(null);
-    handlePredictionsUpdated();
+    await handlePredictionsUpdated();
   }
-  const handlePredictionsUpdated = () => {
+  const handlePredictionsUpdated = async () => {
     if(user?.id){
-      getPredictions(user?.id).then((userPredictions)=>setPredictions(userPredictions));
+      const userPredictions = await getPredictions(user?.id)
+      setPredictions(userPredictions);
     }
   }
 

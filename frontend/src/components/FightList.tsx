@@ -25,7 +25,7 @@ const FightList: React.FC<FightListProps> = ({ fights }) => {
             <div className="fight-event-details">
               <p className="event-date">Date: {new Date(fight.event_date).toLocaleString()}</p>
               {fight.cards.map((card, index) => (
-                <FightCard key={index} fightId={fight.id} card={card} />
+                <FightCard key={index} card={card} />
               ))}
             </div>
           )}
