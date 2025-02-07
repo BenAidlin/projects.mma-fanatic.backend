@@ -92,7 +92,7 @@ const Predictions: React.FC = () => {
                   Predicted winner: {prediction.winner}<br />
                   Method: {prediction.method !== Method.NOT_PICKED ? prediction.method : 'Not specified'}<br />
                   {prediction.round && `Round: ${prediction.round}`}
-                  {prediction.potential_gain && <><br />Potential gain: {prediction.potential_gain}</>}
+                  {prediction.potential_gain && <><br />Potential gain: {prediction.potential_gain}</>}<br/>
                   <button onClick={() => handleEdit(match)}>Edit</button>
                   <button onClick={() => handleDelete([prediction])}>Delete</button>
                 </>
