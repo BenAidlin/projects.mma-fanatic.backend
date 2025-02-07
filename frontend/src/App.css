@@ -91,6 +91,16 @@ body {
   margin: auto;
   display: flex;
 }
+.predict-button:hover{
+  background-color: #0056b3;
+}
+.predict-button-disabled {
+  margin: auto;
+  display: flex;
+  background-color: grey;
+  cursor: not-allowed;
+}
+
 
 .fighters {
   display: flex;
@@ -120,10 +130,6 @@ button {
   border-radius: 2%;
   cursor: pointer;
   transition: background-color 0.3s ease;
-}
-
-button:hover {
-  background-color: #0056b3;
 }
 
 .predictions ul {

@@ -16,3 +16,7 @@ class PredictionDto(BaseModel):
     method: Method
     round: int | None
     potential_gain: int | None
+    # fight identifiers
+    card_id: str
+    hme_id: str
+    awy_id: str

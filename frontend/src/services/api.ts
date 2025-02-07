@@ -26,6 +26,20 @@ export const fetchFights = async (): Promise<Fight[]> => {
   return response.data;
 };
 
-export const submitPrediction = async (prediction: Prediction): Promise<void> => {
-  await axios.post(`${API_BASE_URL}/predictions`, prediction);
+export const getPredictions = async (userId: string): Promise<Prediction[]> => {
+  const response = await axiosInstance.get(`/predictions/${userId}`);
+  return response.data;
+};
+
+export const createPrediction = async (prediction: Prediction): Promise<Prediction> => {
+  const response = await axiosInstance.post('/predictions', prediction);
+  return response.data;
+};
+
+export const updatePrediction = async (prediction: Prediction): Promise<void> => {
+  await axiosInstance.put('/predictions', prediction);
+};
+
+export const deletePredictions = async (predictions: Prediction[]): Promise<void> => {
+  await axiosInstance.delete('/predictions', { data: predictions });
 };

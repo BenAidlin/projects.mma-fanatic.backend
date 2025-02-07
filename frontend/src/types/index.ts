@@ -46,11 +46,23 @@ export interface Fight {
 }
 
 export interface Prediction {
-  fightId: string;
-  matchId: string;
-  predictedWinner: string;
+  prediction_id: string | null;
+  user_id: string;
+  winner: string | null;
+  method: Method;
+  round: number | null;
+  potential_gain: number | null;
+  card_id: string;
+  hme_id: string;
+  awy_id: string;
 }
 
+export enum Method {
+  NOT_PICKED = "NOT_PICKED",
+  KO = "KO",
+  SUB = "SUB",
+  DEC = "DEC"
+}
   
   export interface User {
     id: string | null;
