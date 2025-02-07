@@ -2,12 +2,14 @@ import React, { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { RootState } from '../store';
 import { Fight, Prediction, Method, Match } from '../types';
-import { getPredictions, fetchFights } from '../services/api';
+import { getPredictions, fetchFights, deletePredictions } from '../services/api';
+import Modal from '../components/Modal';
 
 const Predictions: React.FC = () => {
   const [predictions, setPredictions] = useState<Prediction[]>([]);
   const [fights, setFights] = useState<Fight[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [modalMatch, setModalMatch] = useState<Match | null>(null);
   const user = useSelector((state: RootState) => state.user.data);
 
   useEffect(() => {
@@ -56,6 +58,25 @@ const Predictions: React.FC = () => {
     );
   }
 
+  const handleEdit = (match: Match) => {
+    setModalMatch(match)
+  }
+
+  const handleDelete = (predictions: Prediction[]) => {
+    deletePredictions(predictions);
+    handlePredictionsUpdated();
+  }
+
+  const handleModalClose= () => {
+    setModalMatch(null);
+    handlePredictionsUpdated();
+  }
+  const handlePredictionsUpdated = () => {
+    if(user?.id){
+      getPredictions(user?.id).then((userPredictions)=>setPredictions(userPredictions));
+    }
+  }
+
   return (
     <div className="predictions">
       <h2>My Predictions</h2>
@@ -71,6 +92,8 @@ const Predictions: React.FC = () => {
                   Method: {prediction.method !== Method.NOT_PICKED ? prediction.method : 'Not specified'}<br />
                   {prediction.round && `Round: ${prediction.round}`}
                   {prediction.potential_gain && <><br />Potential gain: {prediction.potential_gain}</>}
+                  <button onClick={() => handleEdit(match)}>Edit</button>
+                  <button onClick={() => handleDelete([prediction])}>Delete</button>
                 </>
               ) : (
                 <span>Prediction for unknown fight</span>
@@ -79,6 +102,12 @@ const Predictions: React.FC = () => {
           );
         })}
       </ul>
+      {
+        modalMatch !== null ?
+        <Modal isOpen={modalMatch !== null} onClose={() => {handleModalClose()}} match={modalMatch!} userId={user?.id || ''} />
+        :
+        null
+      }
     </div>
   );
 };

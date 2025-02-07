@@ -31,7 +31,7 @@ const PredictionButton: React.FC<PredictionButtonProps> = ({fightId, match}) => 
         :
         <button onMouseEnter={()=>{}} disabled={true} className='predict-button-disabled'>Can't make predictions</button>
       }
-      <Modal fightId={fightId} match={match} isOpen={isModalOpen} onClose={closeModal} userId={user?.id || ''}>
+      <Modal match={match} isOpen={isModalOpen} onClose={closeModal} userId={user?.id || ''}>
       </Modal>
     </div>
   );
