@@ -1,19 +1,12 @@
 from typing import Union, Optional, Callable
 from kafka import KafkaProducer, KafkaConsumer
-import abc
-
-
-class AbstractMsgClient(abc.ABC):
-    @abc.abstractmethod
-    def produce_message(self, message: str) -> None:
-        pass
-
-    @abc.abstractmethod
-    def consume_messages(self, callback) -> str:
-        pass
+from scheduling_service.src.app.domains.schedule.adapters.abstract_msg_client import (
+    AbstractMsgClient,
+)
 
 
 class KafkaClient(AbstractMsgClient):
+
     def __init__(
         self,
         bootstrap_servers: Union[str, list],
@@ -21,23 +14,20 @@ class KafkaClient(AbstractMsgClient):
         username: Optional[str] = None,
         password: Optional[str] = None,
     ):
-        try:
-            self._bootstrap_servers = bootstrap_servers
-            self._topic = topic
-            self.username = username
-            self.password = password
-            if self.username and self.password:
-                self._producer = KafkaProducer(
-                    bootstrap_servers=bootstrap_servers,
-                    security_protocol="SASL_PLAINTEXT",
-                    sasl_mechanism="PLAIN",
-                    sasl_plain_username=username,
-                    sasl_plain_password=password,
-                )
-            else:  # no authentication
-                self._producer = KafkaProducer(bootstrap_servers=bootstrap_servers)
-        except Exception as e:
-            pass
+        self._bootstrap_servers = bootstrap_servers
+        self._topic = topic
+        self.username = username
+        self.password = password
+        if self.username and self.password:
+            self._producer = KafkaProducer(
+                bootstrap_servers=bootstrap_servers,
+                security_protocol="SASL_PLAINTEXT",
+                sasl_mechanism="PLAIN",
+                sasl_plain_username=username,
+                sasl_plain_password=password,
+            )
+        else:  # no authentication
+            self._producer = KafkaProducer(bootstrap_servers=bootstrap_servers)
 
     def produce_message(self, message: str) -> None:
         self._producer.send(self._topic, message.encode("utf-8"))

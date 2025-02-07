@@ -2,6 +2,12 @@ from contextlib import asynccontextmanager
 from fastapi import FastAPI
 
 from prediction_service.src.app.api import predictions_router
+from prediction_service.src.app.domains.prediction_domain.adapters.abstract_msg_client import (
+    AbstractMsgClient,
+)
+from prediction_service.src.app.domains.prediction_domain.facade.prediction_facade import (
+    PredictionFacade,
+)
 from prediction_service.src.app.infrastructure.dependency_injection_container import (
     DIContainer,
 )

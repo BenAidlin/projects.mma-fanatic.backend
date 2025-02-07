@@ -49,7 +49,7 @@ class DIContainer:
             "AbstractMsgClient",
             KafkaClient(
                 config("KAFKA_BOOTSTRAP_SERVERS"),
-                config("KAFKA_TOPIC"),
+                config("KAFKA_TOPIC_PREDICTION_SERVICE"),
                 config("KAFKA_USER"),
                 config("KAFKA_PASSWORD"),
             ),

@@ -1,5 +1,4 @@
 services:
-
   frontend:
     build:
       context: ./frontend  # Adjust this path to where your React app is located
@@ -32,7 +31,7 @@ services:
       MONGO_PASSWORD: ""
       MONGO_DB: "scheduling"
       KAFKA_BOOTSTRAP_SERVERS: "kafka:9093"
-      KAFKA_TOPIC: "scheduling-events"
+      KAFKA_TOPIC_PREDICTION_SERVICE: "prediction_service_topic"
       KAFKA_USER: ""
       KAFKA_PASSWORD: ""
     networks:
@@ -47,42 +46,6 @@ services:
     networks:
       - app-network
 
-
-  fight_service:
-    build:
-      context: ./fight_service
-      dockerfile: Dockerfile
-    ports:
-      - "8002:8000"
-    volumes:
-      - .:/app
-    command: uvicorn fight_service.src.app.main:app --host 0.0.0.0 --port 8000 --reload
-    depends_on:
-      kafka:
-        condition: service_healthy
-      fight_service_mongodb:
-        condition: service_started
-    environment:
-      MONGO_HOST: "fight_service_mongodb"
-      MONGO_PORT: "27017"
-      MONGO_USER: ""
-      MONGO_PASSWORD: ""
-      MONGO_DB: "fighters"
-      KAFKA_BOOTSTRAP_SERVERS: "kafka:9093"
-      KAFKA_TOPIC: "scheduling-events"
-      KAFKA_USER: ""
-      KAFKA_PASSWORD: ""
-    networks:
-      - app-network
-
-      
-  fight_service_mongodb:
-    image: mongo:6
-    container_name: fight_service_mongodb
-    ports:
-      - "27012:27017"
-    networks:
-      - app-network
 
   prediction_service:
     build:
@@ -103,15 +66,39 @@ services:
       MONGO_PORT: "27017"
       MONGO_USER: ""
       MONGO_PASSWORD: ""
-      MONGO_DB: "users"
+      MONGO_DB: "predictions"
       KAFKA_BOOTSTRAP_SERVERS: "kafka:9093"
-      KAFKA_TOPIC: "user-events"
+      KAFKA_TOPIC_PREDICTION_SERVICE: "prediction_service_topic"
       KAFKA_USER: ""
       KAFKA_PASSWORD: ""
     networks:
       - app-network
 
-      
+  prediction_service_msg_listener:
+    build:
+      context: ./prediction_service
+      dockerfile: Dockerfile
+    volumes:
+      - .:/app
+    command: python -m prediction_service.src.app.msg_listener
+    depends_on:
+      kafka:
+        condition: service_healthy
+      prediction_service_mongodb:
+        condition: service_started
+    environment:
+      MONGO_HOST: "prediction_service_mongodb"
+      MONGO_PORT: "27017"
+      MONGO_USER: ""
+      MONGO_PASSWORD: ""
+      MONGO_DB: "predictions"
+      KAFKA_BOOTSTRAP_SERVERS: "kafka:9093"
+      KAFKA_TOPIC_PREDICTION_SERVICE: "prediction_service_topic"
+      KAFKA_USER: ""
+      KAFKA_PASSWORD: ""
+    networks:
+      - app-network
+
   prediction_service_mongodb:
     image: mongo:6
     container_name: prediction_service_mongodb
@@ -119,8 +106,6 @@ services:
       - "27013:27017"
     networks:
       - app-network
-
-  
   
   bff_service:
     build:
@@ -142,18 +127,12 @@ services:
       MONGO_USER: ""
       MONGO_PASSWORD: ""
       MONGO_DB: "scheduling"
-      KAFKA_BOOTSTRAP_SERVERS: "kafka:9093"
-      KAFKA_TOPIC_SCHEDULING: "scheduling-events"
-      KAFKA_TOPIC_USERS: "user-events"
-      KAFKA_USER: ""
-      KAFKA_PASSWORD: ""
       SERVICE_URL_SCHEDULING: 'http://scheduling_service:8000'
       SERVICE_URL_PREDICTIONS: 'http://prediction_service:8000'
       GOOGLE_REDIRECT_URI: "http://localhost:8004/auth/google/callback"
     networks:
       - app-network
 
-      
   bff_service_mongodb:
     image: mongo:6
     container_name: bff_service_mongodb
@@ -161,8 +140,6 @@ services:
       - "27014:27017"
     networks:
       - app-network
-
-
 
   zookeeper:
     image: wurstmeister/zookeeper:latest

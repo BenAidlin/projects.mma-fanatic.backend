@@ -26,3 +26,7 @@ class PredictionFacade:
 
     def remove_predictions(self, predictions: list[PredictionDto]) -> None:
         self.prediction_service.remove_predictions(predictions)
+
+    @classmethod
+    def handle_fight_msg_update(cls, msg: str) -> None:
+        PredictionService.handle_fight_msg_update(msg)

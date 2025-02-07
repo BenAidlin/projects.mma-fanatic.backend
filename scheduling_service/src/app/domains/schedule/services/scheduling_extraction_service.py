@@ -51,8 +51,7 @@ class SchedulingExtractionService(AbstractSchedulingExtractionService):
                 if card.mtchs:
                     for fight in card.mtchs:
                         if fight:
-                            self.msg_client.produce_message(str(fight.hme.model_dump()))
-                            self.msg_client.produce_message(str(fight.awy.model_dump()))
+                            self.msg_client.produce_message(fight.model_dump_json())
 
     def get_schedule(self) -> list[EventModel]:
         return self.abstract_schedule_repository.get_schedule()

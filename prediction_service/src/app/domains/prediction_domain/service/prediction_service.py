@@ -27,3 +27,7 @@ class PredictionService:
     def remove_predictions(self, predictions: list[PredictionDto]) -> None:
         for prediction in predictions:
             self.prediction_repo.remove_prediction(prediction.prediction_id)
+
+    @classmethod
+    def handle_fight_msg_update(cls, msg: str) -> None:
+        print(msg)

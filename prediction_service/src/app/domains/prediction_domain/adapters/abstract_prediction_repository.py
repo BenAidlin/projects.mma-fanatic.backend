@@ -21,3 +21,4 @@ class AbstractPredictionRepository(abc.ABC):
     @abc.abstractmethod
     def remove_prediction(self, prediction_id: str) -> None:
         pass
+

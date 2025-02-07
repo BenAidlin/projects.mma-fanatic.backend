@@ -1,5 +1,7 @@
 import threading
 from typing import Any
+from decouple import config
+from prediction_service.src.app.infrastructure.kafka_client import KafkaClient
 
 
 class DIContainer:
@@ -43,7 +45,15 @@ class DIContainer:
         from prediction_service.src.app.domains.prediction_domain.facade.prediction_facade import (
             PredictionFacade,
         )
-
+        DIContainer.register(
+            "AbstractMsgClient",
+            KafkaClient(
+                config("KAFKA_BOOTSTRAP_SERVERS"),
+                config("KAFKA_TOPIC_PREDICTION_SERVICE"),
+                config("KAFKA_USER"),
+                config("KAFKA_PASSWORD"),
+            ),
+        )
         DIContainer.register("AbstractPredictionRepository", PredictionRepository())
         DIContainer.register("PredictionService", PredictionService())
         DIContainer.register("PredictionFacade", PredictionFacade())
