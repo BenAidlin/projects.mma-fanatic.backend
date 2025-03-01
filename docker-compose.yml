@@ -130,6 +130,8 @@ services:
       SERVICE_URL_SCHEDULING: 'http://scheduling_service:8000'
       SERVICE_URL_PREDICTIONS: 'http://prediction_service:8000'
       GOOGLE_REDIRECT_URI: "http://localhost:8004/auth/google/callback"
+      REACT_APP: "http://localhost:3000"
+
     networks:
       - app-network
 
