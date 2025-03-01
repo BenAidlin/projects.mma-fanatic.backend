@@ -1,3 +1,6 @@
+To Run: <br>
+docker-compose up --build
+
 Architecture:
 
 Scheduling service ----> Fills schedule and responsible for live events(live event might be separate service) - the non user triggered engine.
