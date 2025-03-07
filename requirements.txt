@@ -1,4 +1,3 @@
 -r scheduling_service/requirements.txt
--r fight_service/requirements.txt
 -r prediction_service/requirements.txt
 -r bff_service/requirements.txt
