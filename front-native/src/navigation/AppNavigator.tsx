@@ -9,7 +9,7 @@ const AppNavigator: React.FC = () => {
 
   return (
     <NavigationContainer>
-      {isLoggedIn ? <TabNavigator /> : <LoginScreen />}
+      {isLoggedIn ? <TabNavigator /> : <LoginScreen setIsLoggedIn={setIsLoggedIn}/>}
     </NavigationContainer>
   );
 };

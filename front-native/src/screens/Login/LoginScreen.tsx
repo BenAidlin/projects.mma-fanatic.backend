@@ -3,12 +3,20 @@ import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 import { initiateGoogleLogin } from '../../services/authService';
 
-const LoginScreen: React.FC = () => {
+interface LoginScreenProps {
+  setIsLoggedIn: (isLoggedIn: boolean) => void;  // Define the type for the function prop
+}
+
+const logIn = () => {
+  initiateGoogleLogin();
+}
+
+const LoginScreen: React.FC<LoginScreenProps> = ({setIsLoggedIn}) => {
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome</Text>
       <Text style={styles.subtitle}>Please log in with Google to continue</Text>
-      <Button title="Login with Google" onPress={initiateGoogleLogin} />
+      <Button title="Login with Google" onPress={() => setIsLoggedIn(true)} />
     </View>
   );
 };
