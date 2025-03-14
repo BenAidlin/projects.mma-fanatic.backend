@@ -3,14 +3,15 @@ import React, { useState } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import LoginScreen from '../screens/Login/LoginScreen';
 import TabNavigator from './TabNavigator';
+import { useSelector } from 'react-redux';
 
 const AppNavigator: React.FC = () => {
-  const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false); // Replace with real auth logic
+  const user = useSelector((state: any) => state.user);  // Access user state from Redux
 
   return (
-    <NavigationContainer>
-      {isLoggedIn ? <TabNavigator /> : <LoginScreen setIsLoggedIn={setIsLoggedIn}/>}
-    </NavigationContainer>
+      <NavigationContainer>
+        {user ? <TabNavigator /> : <LoginScreen/>}
+      </NavigationContainer>
   );
 };
 

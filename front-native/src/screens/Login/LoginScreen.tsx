@@ -1,22 +1,23 @@
 // src/screens/Login/LoginScreen.tsx
 import React from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
-import { initiateGoogleLogin } from '../../services/authService';
+import { useDispatch, useSelector } from 'react-redux';
+import { login } from '../../store/actions/userActions';
 
-interface LoginScreenProps {
-  setIsLoggedIn: (isLoggedIn: boolean) => void;  // Define the type for the function prop
-}
 
-const logIn = () => {
-  initiateGoogleLogin();
-}
+const LoginScreen: React.FC = () => {
+  const dispatch = useDispatch();
+  const user = useSelector((state: any) => state.user);  // Access user state from Redux
 
-const LoginScreen: React.FC<LoginScreenProps> = ({setIsLoggedIn}) => {
+  const handleLogin = () => {
+    dispatch(login());  // Dispatch login action
+  };
+
   return (
     <View style={styles.container}>
       <Text style={styles.title}>Welcome</Text>
       <Text style={styles.subtitle}>Please log in with Google to continue</Text>
-      <Button title="Login with Google" onPress={() => setIsLoggedIn(true)} />
+      <Button title="Login with Google" onPress={handleLogin} />
     </View>
   );
 };
