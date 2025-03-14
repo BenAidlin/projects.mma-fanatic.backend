@@ -5,7 +5,6 @@ import ScheduleScreen from '../screens/Schedule/ScheduleScreen';
 import MyPicksScreen from '../screens/MyPicks/MyPicksScreen';
 import HistoryScreen from '../screens/History/HistoryScreen';
 import MoreScreen from '../screens/More/MoreScreen';
-import LoginScreen from '../screens/Login/LoginScreen';
 
 const Tab = createBottomTabNavigator();
 
