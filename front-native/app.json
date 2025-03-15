@@ -1,26 +1,31 @@
 {
   "expo": {
-    "name": "front-native",
-    "slug": "front-native",
-    "version": "1.0.0",
-    "orientation": "portrait",
-    "icon": "./assets/icon.png",
-    "userInterfaceStyle": "light",
-    "newArchEnabled": true,
-    "splash": {
-      "image": "./assets/splash-icon.png",
-      "resizeMode": "contain",
-      "backgroundColor": "#ffffff"
-    },
+    "name": "YourApp",
+    "slug": "yourapp",
+    "platforms": ["ios", "android", "web"],
     "ios": {
-      "supportsTablet": true
-    },
-    "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#ffffff"
+      "bundleIdentifier": "com.yourname.yourapp",
+      "buildNumber": "1.0.0",
+      "config": {
+        "googleSignIn": {
+          "reservedClientId": "com.googleusercontent.apps.YOUR_CLIENT_ID"
+        }
       }
     },
+    "android": {
+      "package": "com.yourname.yourapp",
+      "versionCode": 1,
+      "intentFilters": [
+        {
+          "action": "VIEW",
+          "data": {
+            "scheme": "yourapp"
+          },
+          "category": ["BROWSABLE", "DEFAULT"]
+        }
+      ]
+    },
+    "scheme": "yourapp", 
     "web": {
       "favicon": "./assets/favicon.png"
     }

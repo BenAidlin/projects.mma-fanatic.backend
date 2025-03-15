@@ -80,7 +80,6 @@ async def google_auth():
 @app.get("/auth/google/callback")
 async def google_auth_callback(code: str):
     token_url = "https://oauth2.googleapis.com/token"
-
     async with AsyncClient() as client:
         token_response = await client.post(
             token_url,

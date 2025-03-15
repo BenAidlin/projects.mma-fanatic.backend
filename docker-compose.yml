@@ -129,8 +129,8 @@ services:
       MONGO_DB: "scheduling"
       SERVICE_URL_SCHEDULING: 'http://scheduling_service:8000'
       SERVICE_URL_PREDICTIONS: 'http://prediction_service:8000'
-      GOOGLE_REDIRECT_URI: "http://localhost:8004/auth/google/callback"
-      REACT_APP: "http://localhost:3000"
+      GOOGLE_REDIRECT_URI: "https://poodle-unique-frankly.ngrok-free.app/auth/google/callback"
+      REACT_APP: "yourapp:/"
 
     networks:
       - app-network
